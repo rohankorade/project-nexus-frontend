@@ -22,26 +22,53 @@ header h1 {
     flex-wrap: wrap;
 }
 
+/* --- ADD THIS NEW SET OF RULES --- */
 .stat-card {
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    min-width: 200px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+    display: flex;
+    align-items: stretch; /* Make children same height */
+    min-width: 240px;
+    overflow: hidden; /* Ensures child border-radius is clipped */
+    transition: transform 0.2s ease-in-out;
 }
 
-.stat-card h2 {
-    margin-top: 0;
-    font-size: 1rem;
-    color: #555;
+.stat-card:hover {
+    transform: translateY(-5px); /* Add a subtle hover effect */
 }
 
-.stat-card p {
+.stat-name {
+    background-color: #34495e;
+    color: white;
+    font-weight: bold;
+    padding: 20px 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    writing-mode: vertical-rl; /* Makes text vertical */
+    text-orientation: mixed;
+    transform: rotate(180deg); /* Flips vertical text to read top-down */
+    font-size: 1.1rem;
+}
+
+.stat-body {
+    padding: 15px 20px;
+    text-align: left;
+    flex-grow: 1; /* Allows this section to take up remaining space */
+}
+
+.stat-title {
+    font-size: 0.85rem;
+    color: #7f8c8d;
+    margin-bottom: 5px;
+}
+
+.stat-number {
     font-size: 2.5rem;
     font-weight: bold;
     color: #3498db;
-    margin: 0;
+    line-height: 1;
 }
 
 main {
@@ -219,6 +246,7 @@ main {
     font-size: 1rem;
     margin-bottom: 15px;
     box-sizing: border-box;
+    text-align: center;
 }
 
 #login-button {
@@ -250,4 +278,13 @@ main {
     20%, 80% { transform: translate3d(2px, 0, 0); }
     30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
     40%, 60% { transform: translate3d(4px, 0, 0); }
+}
+
+
+.note-actions button.delete-btn {
+    background-color: #e74c3c; /* A distinct red color */
+}
+
+.note-actions button.delete-btn:hover {
+    background-color: #c0392b;
 }

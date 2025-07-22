@@ -134,9 +134,25 @@ function createNoteElement(note) {
     const itemDiv = document.createElement('div');
     itemDiv.className = 'note-item';
     const formattedTime = new Date(note.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    itemDiv.innerHTML = `<div class="note-info"><p class="filename">${note.filename}</p><p class="meta">Shared by <strong>${note.shared_by}</strong> at ${formattedTime}</p></div><div class="note-actions"><button class="copy-btn">Copy</button><button class="preview-btn">Preview</button><a href="${API_BASE_URL}/download/${note.filename}" target="_blank"><button>Download</button></a></div>`;
+    // Removed the <a href...> download button, added a new delete-btn
+    itemDiv.innerHTML = `
+        <div class="note-info">
+            <p class="filename">${note.filename}</p>
+            <p class="meta">Shared by <strong>${note.shared_by}</strong> at ${formattedTime}</p>
+        </div>
+        <div class="note-actions">
+            <button class="copy-btn">Copy</button>
+            <button class="preview-btn">Preview</button>
+            <button class="delete-btn">Delete</button>
+        </div>
+    `;
+
+    // Attach event listeners to the buttons
     itemDiv.querySelector('.preview-btn').addEventListener('click', () => showPreview(note));
     itemDiv.querySelector('.copy-btn').addEventListener('click', (event) => copyNoteContent(note, event.target));
+    // NEW event listener for the delete button
+    itemDiv.querySelector('.delete-btn').addEventListener('click', () => deleteNote(note, itemDiv));
+    
     return itemDiv;
 }
 
@@ -169,5 +185,31 @@ async function copyNoteContent(note, buttonElement) {
         buttonElement.textContent = 'Error!';
         buttonElement.style.backgroundColor = '#e74c3c';
         setTimeout(() => { buttonElement.textContent = originalText; buttonElement.style.backgroundColor = ''; }, 2000);
+    }
+}
+
+async function deleteNote(note, elementToRemove) {
+    // Show a confirmation dialog before deleting
+    if (!confirm(`Are you sure you want to permanently delete "${note.filename}"?`)) {
+        return; // Stop if the user clicks "Cancel"
+    }
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/notes/${note.filename}`, {
+            method: 'DELETE',
+        });
+
+        if (!response.ok) {
+            throw new Error('Server responded with an error.');
+        }
+
+        // If successful, remove the note element from the page for instant feedback
+        elementToRemove.style.transition = 'opacity 0.5s ease';
+        elementToRemove.style.opacity = '0';
+        setTimeout(() => elementToRemove.remove(), 500);
+
+    } catch (err) {
+        console.error('Failed to delete note: ', err);
+        alert('Could not delete the note. Please try again.');
     }
 }
