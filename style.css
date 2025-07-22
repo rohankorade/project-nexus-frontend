@@ -6,61 +6,6 @@ body {
     padding: 20px;
 }
 
-header {
-    text-align: center;
-    margin-bottom: 40px;
-}
-
-.stats-container {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    flex-wrap: wrap;
-}
-
-
-/* --- ADD THIS NEW, CLEANER VERSION --- */
-.stat-card {
-    background-color: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    width: 220px;
-    text-align: center;
-    overflow: hidden; /* Important for the header's top border radius */
-    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-}
-
-.stat-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
-}
-
-.stat-name {
-    background-color: #34495e;
-    color: white;
-    padding: 10px;
-    font-size: 1.1rem;
-    font-weight: 600;
-}
-
-.stat-body {
-    padding: 15px 20px 20px 20px; /* Top, Right, Bottom, Left */
-}
-
-.stat-title {
-    font-size: 0.9rem;
-    color: #7f8c8d;
-    margin: 0 0 5px 0; /* No top margin, 5px bottom margin */
-}
-
-.stat-number {
-    font-size: 3rem;
-    font-weight: 700;
-    color: #3498db;
-    line-height: 1;
-    margin: 0;
-}
-
 
 main {
     max-width: 800px;
@@ -280,27 +225,100 @@ main {
     background-color: #c0392b;
 }
 
-/* --- ADD THESE NEW STYLES FOR THE TITLE --- */
+
+/* The main top bar container */
+/* The new top bar container */
+/* Add this new rule */
+header {
+    max-width: 1100px; /* Sets a maximum width */
+    margin: 0 auto;    /* Centers the header on the page */
+    padding: 0 20px;   /* Adds some space on the sides on smaller screens */
+}
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center; /* This vertically centers the title and stats */
+    padding: 0 0 20px 0; /* Add padding only to top and bottom */
+}
+
+/* Main Title (Left Side) */
 .main-title {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    line-height: 1.2; /* Adjusts spacing between lines */
+    line-height: 1.2;
 }
 
 .title-main-text {
-    font-size: 3rem; /* Large size for "Nexus" */
+    font-size: 3.5rem;
     font-weight: 700;
     color: #2c3e50;
 }
 
 .title-sub-text {
-    font-size: 1rem; /* Smaller size for "Dashboard" */
+    font-size: 0.9rem;
     font-weight: 500;
-    color: #ffffff; /* White text */
-    background-color: #3498db; /* Blue highlight color */
-    padding: 4px 12px; /* Vertical and horizontal padding */
+    color: #ffffff;
+    background-color: #3498db;
+    padding: 2px 10px;
     border-radius: 6px;
-    letter-spacing: 0.5px; /* Adds a bit of space between letters */
+    letter-spacing: 0.5px;
     margin-top: 5px;
+    align-self: flex-start; /* Aligns highlight to the left */
+}
+
+/* Stats Container (Right Side) */
+.stats-container {
+    display: flex;
+    flex-direction: column; /* Stacks the stat cards vertically */
+    gap: 10px; /* Space between the two cards */
+}
+
+/* A single compact stat card */
+.stat-card {
+    background-color: #ffffff;
+    border-radius: 8px; /* The corner roundness */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.07);
+    display: flex;
+    width: 280px;
+    overflow: hidden; /* This is crucial */
+    align-items: stretch; /* This ensures both sections are the same height */
+}
+
+.stat-name {
+    background-color: #3498db;
+    color: white;
+    font-weight: 600;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 90px; /* Add this line to set a fixed width */
+    box-sizing: border-box; /* Ensures padding is included in the width */
+}
+
+.stat-body {
+    padding: 10px 15px;
+    text-align: right;
+    flex-grow: 1; /* Pushes stats to the far right */
+    border-left: 1px solid #f0f0f0; /* Adds a subtle internal line */
+}
+
+.stat-title {
+    font-size: 0.8rem;
+    color: #7f8c8d;
+}
+
+.stat-number {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #3498db;
+    line-height: 1;
+}
+
+/* The barely-visible divider */
+.divider {
+    border: none;
+    height: 1px;
+    background-color: #e0e6ed; /* Light grey color */
+    margin: 0 20px 20px 20px; /* Top, Sides, Bottom */
 }
