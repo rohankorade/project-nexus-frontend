@@ -94,6 +94,7 @@ async function fetchAndDisplayNotes() {
 
 function updateStats(notes) {
     let rohanCount = 0; let malharCount = 0;
+    //shrutuli is my babydoll
     const today = new Date().toISOString().slice(0, 10);
     for (const note of notes) {
         if (note.timestamp.slice(0, 10) === today) {
@@ -208,9 +209,7 @@ async function deleteNote(note, elementToRemove) {
             throw new Error('Server responded with an error.');
         }
 
-        elementToRemove.style.transition = 'opacity 0.5s ease';
-        elementToRemove.style.opacity = '0';
-        setTimeout(() => elementToRemove.remove(), 500);
+        fetchAndDisplayNotes();
 
     } catch (err) {
         console.error('Failed to delete note: ', err);
