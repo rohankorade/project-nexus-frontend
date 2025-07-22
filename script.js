@@ -1,4 +1,3 @@
-// Change the API URL to use the Netlify proxy
 const API_BASE_URL = '/api';
 
 // --- Get elements from the HTML ---
@@ -26,12 +25,9 @@ window.onclick = (event) => {
 
 // --- Core Functions ---
 
-/**
- * Fetches notes from our API and displays them.
- */
 async function fetchAndDisplayNotes() {
     try {
-        const response = await fetch(`${API_BASE_URL}/api/notes`);
+        const response = await fetch(`${API_BASE_URL}/notes`); // Path uses proxy
         if (!response.ok) throw new Error(`API Error: ${response.status}`);
         const notes = await response.json();
         updateStats(notes);
@@ -42,9 +38,6 @@ async function fetchAndDisplayNotes() {
     }
 }
 
-/**
- * Updates the 'Rohan' and 'Malhar' daily stats.
- */
 function updateStats(notes) {
     let rohanCount = 0;
     let malharCount = 0;
@@ -60,9 +53,6 @@ function updateStats(notes) {
     malharTodayEl.textContent = malharCount;
 }
 
-/**
- * Groups notes by date and shows them on the page.
- */
 function displayNotes(notes) {
     notesListContainer.innerHTML = '';
     if (notes.length === 0) {
@@ -96,9 +86,6 @@ function displayNotes(notes) {
     }
 }
 
-/**
- * Creates the HTML for a single note item.
- */
 function createNoteElement(note) {
     const itemDiv = document.createElement('div');
     itemDiv.className = 'note-item';
@@ -110,32 +97,69 @@ function createNoteElement(note) {
             <p class="meta">Shared by <strong>${note.shared_by}</strong> at ${formattedTime}</p>
         </div>
         <div class="note-actions">
+            <button class="copy-btn">Copy</button>
             <button class="preview-btn">Preview</button>
-            <a href="${API_BASE_URL}/api/download/${note.filename}" target="_blank">
+            <a href="${API_BASE_URL}/download/${note.filename}" target="_blank">
                 <button>Download</button>
             </a>
         </div>
     `;
 
+    // Attach event listeners to the buttons
     itemDiv.querySelector('.preview-btn').addEventListener('click', () => showPreview(note));
+    itemDiv.querySelector('.copy-btn').addEventListener('click', (event) => copyNoteContent(note, event.target));
+    
     return itemDiv;
 }
 
-/**
-
- * Shows the preview modal with the note's content.
- */
 async function showPreview(note) {
     modalTitle.textContent = note.filename;
     modalBody.innerHTML = '<p class="loading">Loading preview...</p>';
     modal.style.display = 'block';
 
     try {
-        const response = await fetch(`${API_BASE_URL}/api/download/${note.filename}`);
+        const response = await fetch(`${API_BASE_URL}/download/${note.filename}`);
         const markdownText = await response.text();
         const htmlContent = markdownConverter.makeHtml(markdownText);
         modalBody.innerHTML = htmlContent;
     } catch (error) {
         modalBody.innerHTML = '<p>Could not load preview.</p>';
+    }
+}
+
+/**
+ * NEW FUNCTION: Fetches note content and copies it to the clipboard.
+ * @param {Object} note - The note object to copy.
+ * @param {HTMLElement} buttonElement - The button that was clicked.
+ */
+async function copyNoteContent(note, buttonElement) {
+    try {
+        // Fetch the raw markdown text
+        const response = await fetch(`${API_BASE_URL}/download/${note.filename}`);
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        const markdownText = await response.text();
+
+        // Use the modern Clipboard API to copy the text
+        await navigator.clipboard.writeText(markdownText);
+
+        // Provide visual feedback to the user
+        const originalText = buttonElement.textContent;
+        buttonElement.textContent = 'Copied!';
+        setTimeout(() => {
+            buttonElement.textContent = originalText;
+        }, 2000); // Revert back after 2 seconds
+
+    } catch (err) {
+        console.error('Failed to copy content: ', err);
+        // Provide error feedback
+        const originalText = buttonElement.textContent;
+        buttonElement.textContent = 'Error!';
+        buttonElement.style.backgroundColor = '#e74c3c'; // Red color for error
+        setTimeout(() => {
+            buttonElement.textContent = originalText;
+            buttonElement.style.backgroundColor = ''; // Revert style
+        }, 2000);
     }
 }
