@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Nexus Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/2.1.0/showdown.min.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Project Nexus</h1>
+        <div class="stats-container">
+            <div class="stat-card">
+                <h2>Rohan's Uploads (Today)</h2>
+                <p id="rohan-today">0</p>
+            </div>
+            <div class="stat-card">
+                <h2>Malhar's Uploads (Today)</h2>
+                <p id="malhar-today">0</p>
+            </div>
+        </div>
+    </header>
+
+    <main id="notes-list-container">
+        <p class="loading">Loading notes...</p>
+    </main>
+
+    <div id="preview-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h3 id="preview-title"></h3>
+            <div id="preview-body"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
