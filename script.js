@@ -1,5 +1,5 @@
-// Change this line in your script.js
-const API_BASE_URL = 'https://battousai.pythonanywhere.com';
+// Change the API URL to use the Netlify proxy
+const API_BASE_URL = '/api';
 
 // --- Get elements from the HTML ---
 const notesListContainer = document.getElementById('notes-list-container');
