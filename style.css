@@ -283,3 +283,12 @@ main {
 .note-actions button.delete-btn:hover {
     background-color: #c0392b;
 }
+
+/* Style for the smaller part of the main title */
+.sub-heading {
+    font-size: 40%;
+    font-weight: 400;
+    color: #7f8c8d;
+    vertical-align: middle;
+    margin-left: 5px;
+}
