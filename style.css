@@ -371,3 +371,58 @@ header {
 #recent-notes .note-item {
     margin-bottom: 10px;
 }
+
+
+* --- NEW FILE EXPLORER STYLES --- */
+.tree-level {
+    list-style: none;
+    padding-left: 20px;
+}
+
+.tree-item {
+    padding: 2px 0;
+}
+
+.folder-item {
+    font-weight: 500;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 4px;
+}
+
+.folder-item:hover {
+    background-color: #f4f7f9;
+}
+
+.folder-item span {
+    margin-right: 5px;
+}
+
+/* Collapsed state for folders */
+.tree-item.collapsed > ul {
+    display: none;
+}
+
+/* Add a little triangle icon to folders */
+.tree-item > .folder-item::before {
+    content: '▶';
+    display: inline-block;
+    margin-right: 7px;
+    font-size: 0.8em;
+    transition: transform 0.2s ease-in-out;
+}
+
+/* Rotate the icon when the folder is expanded */
+.tree-item:not(.collapsed) > .folder-item::before {
+    transform: rotate(90deg);
+}
+
+/* Style for note items inside the explorer */
+.file-container .note-item {
+    padding: 8px;
+    box-shadow: none;
+    border: 1px solid #f0f0f0;
+}
+.file-container .note-item .meta {
+    font-size: 0.75rem; /* Make metadata smaller in the tree */
+}
