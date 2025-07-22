@@ -1,4 +1,5 @@
-const API_BASE_URL = 'https://project-nexus-c0v8.onrender.com';
+// Change this line in your script.js
+const API_BASE_URL = 'http://battousai.pythonanywhere.com';
 
 // --- Get elements from the HTML ---
 const notesListContainer = document.getElementById('notes-list-container');
