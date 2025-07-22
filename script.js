@@ -1,5 +1,5 @@
 // Change this line in your script.js
-const API_BASE_URL = 'http://battousai.pythonanywhere.com';
+const API_BASE_URL = 'https://battousai.pythonanywhere.com';
 
 // --- Get elements from the HTML ---
 const notesListContainer = document.getElementById('notes-list-container');
