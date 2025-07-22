@@ -22,54 +22,49 @@ header h1 {
     flex-wrap: wrap;
 }
 
-/* --- ADD THIS NEW SET OF RULES --- */
+
+/* --- ADD THIS NEW, CLEANER VERSION --- */
 .stat-card {
     background-color: #ffffff;
-    border-radius: 12px;
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
-    display: flex;
-    align-items: stretch; /* Make children same height */
-    min-width: 240px;
-    overflow: hidden; /* Ensures child border-radius is clipped */
-    transition: transform 0.2s ease-in-out;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    width: 220px;
+    text-align: center;
+    overflow: hidden; /* Important for the header's top border radius */
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 }
 
 .stat-card:hover {
-    transform: translateY(-5px); /* Add a subtle hover effect */
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
 }
 
 .stat-name {
     background-color: #34495e;
     color: white;
-    font-weight: bold;
-    padding: 20px 15px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    writing-mode: vertical-rl; /* Makes text vertical */
-    text-orientation: mixed;
-    transform: rotate(180deg); /* Flips vertical text to read top-down */
+    padding: 10px;
     font-size: 1.1rem;
+    font-weight: 600;
 }
 
 .stat-body {
-    padding: 15px 20px;
-    text-align: left;
-    flex-grow: 1; /* Allows this section to take up remaining space */
+    padding: 15px 20px 20px 20px; /* Top, Right, Bottom, Left */
 }
 
 .stat-title {
-    font-size: 0.85rem;
+    font-size: 0.9rem;
     color: #7f8c8d;
-    margin-bottom: 5px;
+    margin: 0 0 5px 0; /* No top margin, 5px bottom margin */
 }
 
 .stat-number {
-    font-size: 2.5rem;
-    font-weight: bold;
+    font-size: 3rem;
+    font-weight: 700;
     color: #3498db;
     line-height: 1;
+    margin: 0;
 }
+
 
 main {
     max-width: 800px;
