@@ -322,3 +322,52 @@ header {
     background-color: #e0e6ed; /* Light grey color */
     margin: 0 20px 20px 20px; /* Top, Sides, Bottom */
 }
+
+/* --- NEW TWO-COLUMN LAYOUT STYLES --- */
+
+.main-container {
+    display: flex;
+    gap: 20px; /* Space between the columns */
+    align-items: flex-start;
+    padding: 0 20px; /* Match header side padding */
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.column {
+    background-color: #ffffff;
+    border: 1px solid #e0e6ed;
+    border-radius: 8px;
+    height: 70vh; /* Set a height for the columns */
+    display: flex;
+    flex-direction: column; /* Stack header and content vertically */
+}
+
+.column h2 {
+    margin: 0;
+    padding: 15px;
+    font-size: 1.1rem;
+    border-bottom: 1px solid #e0e6ed;
+    color: #34495e;
+}
+
+/* The main content area of each column */
+.scroll-view {
+    padding: 10px;
+    overflow-y: auto; /* This makes each column scrollable */
+    flex-grow: 1; /* Allows the content to fill the available height */
+}
+
+/* Specific widths for each column */
+#file-explorer {
+    flex: 1; /* Takes up 1 part of the available space */
+}
+
+#recent-notes {
+    flex: 2; /* Takes up 2 parts of the available space */
+}
+
+/* Style for the note items inside the new columns */
+#recent-notes .note-item {
+    margin-bottom: 10px;
+}
