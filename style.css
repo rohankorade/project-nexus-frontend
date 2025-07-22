@@ -11,10 +11,6 @@ header {
     margin-bottom: 40px;
 }
 
-header h1 {
-    color: #2c3e50;
-}
-
 .stats-container {
     display: flex;
     justify-content: center;
@@ -284,11 +280,27 @@ main {
     background-color: #c0392b;
 }
 
-/* Style for the smaller part of the main title */
-.sub-heading {
-    font-size: 40%;
-    font-weight: 400;
-    color: #7f8c8d;
-    vertical-align: middle;
-    margin-left: 5px;
+/* --- ADD THESE NEW STYLES FOR THE TITLE --- */
+.main-title {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    line-height: 1.2; /* Adjusts spacing between lines */
+}
+
+.title-main-text {
+    font-size: 3rem; /* Large size for "Nexus" */
+    font-weight: 700;
+    color: #2c3e50;
+}
+
+.title-sub-text {
+    font-size: 1rem; /* Smaller size for "Dashboard" */
+    font-weight: 500;
+    color: #ffffff; /* White text */
+    background-color: #3498db; /* Blue highlight color */
+    padding: 4px 12px; /* Vertical and horizontal padding */
+    border-radius: 6px;
+    letter-spacing: 0.5px; /* Adds a bit of space between letters */
+    margin-top: 5px;
 }
