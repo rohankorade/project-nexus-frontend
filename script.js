@@ -195,9 +195,9 @@ async function deleteNote(note, elementToRemove) {
     }
 
     try {
-        // CHANGED: Now using a POST request to a new URL
-        const response = await fetch(`${API_BASE_URL}/delete-note`, {
-            method: 'POST',
+        // CHANGED: Now using a DELETE request to the main /api/notes endpoint
+        const response = await fetch(`${API_BASE_URL}/notes`, {
+            method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
             },
