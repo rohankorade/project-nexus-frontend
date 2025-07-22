@@ -11,8 +11,6 @@
 
     <div id="login-overlay" class="login-container">
         <div class="login-box">
-            <h1>Project Nexus</h1>
-            <p>Please enter your Nexus Key to continue.</p>
             <input type="password" id="nexus-key-input" placeholder="Nexus Key">
             <button id="login-button">Enter</button>
         </div>
@@ -23,19 +21,24 @@
             <h1>Project Nexus Dashboard</h1>
             <div class="stats-container">
                 <div class="stat-card">
-                    <h2>Rohan's Uploads (Today)</h2>
-                    <p id="rohan-today">0</p>
+                    <div class="stat-name">Rohan</div>
+                    <div class="stat-body">
+                        <div class="stat-title">Uploads Today</div>
+                        <div class="stat-number" id="rohan-today">0</div>
+                    </div>
                 </div>
                 <div class="stat-card">
-                    <h2>Malhar's Uploads (Today)</h2>
-                    <p id="malhar-today">0</p>
+                    <div class="stat-name">Malhar</div>
+                    <div class="stat-body">
+                        <div class="stat-title">Uploads Today</div>
+                        <div class="stat-number" id="malhar-today">0</div>
+                    </div>
                 </div>
             </div>
         </header>
-
-        <main id="notes-list-container">
-            </main>
+        <main id="notes-list-container"></main>
     </div>
+
 
     <div id="preview-modal" class="modal">
         <div class="modal-content">
