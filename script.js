@@ -172,7 +172,8 @@ async function showPreview(note) {
 
 async function copyNoteContent(note, buttonElement) {
     try {
-        const response = await fetch(`${API_A_BASE_URL}/download/${note.filename}`);
+        // FIXED THE TYPO HERE: API_A_BASE_URL -> API_BASE_URL
+        const response = await fetch(`${API_BASE_URL}/download/${note.filename}`);
         if (!response.ok) throw new Error('Network response was not ok');
         const markdownText = await response.text();
         await navigator.clipboard.writeText(markdownText);
@@ -189,21 +190,24 @@ async function copyNoteContent(note, buttonElement) {
 }
 
 async function deleteNote(note, elementToRemove) {
-    // Show a confirmation dialog before deleting
     if (!confirm(`Are you sure you want to permanently delete "${note.filename}"?`)) {
-        return; // Stop if the user clicks "Cancel"
+        return;
     }
 
     try {
-        const response = await fetch(`${API_BASE_URL}/notes/${note.filename}`, {
-            method: 'DELETE',
+        // CHANGED: Now using a POST request to a new URL
+        const response = await fetch(`${API_BASE_URL}/delete-note`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ filename: note.filename }) // Send filename in the body
         });
 
         if (!response.ok) {
             throw new Error('Server responded with an error.');
         }
 
-        // If successful, remove the note element from the page for instant feedback
         elementToRemove.style.transition = 'opacity 0.5s ease';
         elementToRemove.style.opacity = '0';
         setTimeout(() => elementToRemove.remove(), 500);
