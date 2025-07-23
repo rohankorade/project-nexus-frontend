@@ -308,13 +308,13 @@ header {
     justify-content: center;
     gap: 4px;
     padding: 8px;
-    width: 110px;
+    width: 24px;
     border-left: 1px solid rgba(0,0,0,0.05);
     box-sizing: border-box;
 }
 .note-actions button {
     width: 100%;
-    padding: 5px;
+    padding: 4px;
     font-size: 0.8rem;
     font-weight: 500;
     margin-left: 0;
@@ -327,12 +327,18 @@ header {
     cursor: pointer;
     transition: background-color 0.2s;
 }
-.note-actions button.copy-btn { background-color: #f39c12; color: white; }
+/* .note-actions button.copy-btn { background-color: #f39c12; color: white; }
 .note-actions button.copy-btn:hover { background-color: #e67e22; }
 .note-actions button.preview-btn { background-color: #9b59b6; color: white; }
 .note-actions button.preview-btn:hover { background-color: #8e44ad; }
 .note-actions button.delete-btn { background-color: #e74c3c; color: white; }
-.note-actions button.delete-btn:hover { background-color: #c0392b; }
+.note-actions button.delete-btn:hover { background-color: #c0392b; } */
+
+.note-actions button svg {
+    width: 16px;  /* Controls the size of the icon */
+    height: 16px;
+    stroke-width: 2.5; /* Makes the lines slightly thicker */
+}
 
 /* --- NEW STYLES FOR PATH INFO IN NOTE ITEMS --- */
 .path-info {
@@ -450,3 +456,5 @@ header {
   30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
   40%, 60% { transform: translate3d(4px, 0, 0); }
 }
+
+
