@@ -110,56 +110,53 @@ async function fetchAndDisplayNotes() {
     }
 }
 
-// Replace the old updateStats function with this one
 function updateStats(notes) {
     // --- Daily & Total Stats Logic ---
-    let rohanToday = 0;
-    let malharToday = 0;
-    let rohanTotal = 0;
-    let malharTotal = 0;
-
+    let rohanToday = 0, malharToday = 0, rohanTotal = 0, malharTotal = 0;
     const today = new Date().toISOString().slice(0, 10);
 
+    // --- Category Totals Setup ---
+    const categoryTotals = {
+        'GS 1': 0,
+        'GS 2': 0,
+        'GS 3': 0,
+        'GS 4': 0,
+        'Optional 1': 0,
+        'Optional 2': 0,
+    };
+
+    // --- Single Loop for All Calculations ---
     for (const note of notes) {
-        // Check who uploaded for total counts
+        // Calculate user totals
         if (note.shared_by.toLowerCase() === 'rohan') {
             rohanTotal++;
+            if (note.timestamp.slice(0, 10) === today) rohanToday++;
         } else if (note.shared_by.toLowerCase() === 'malhar') {
             malharTotal++;
+            if (note.timestamp.slice(0, 10) === today) malharToday++;
         }
 
-        // Check if it was today for daily counts
-        if (note.timestamp.slice(0, 10) === today) {
-            if (note.shared_by.toLowerCase() === 'rohan') rohanToday++;
-            else if (note.shared_by.toLowerCase() === 'malhar') malharToday++;
+        // Calculate category totals
+        for (const category in categoryTotals) {
+            if (note.filepath.startsWith(category + '/')) {
+                categoryTotals[category]++;
+                break; // Stop checking once a category is found for this note
+            }
         }
     }
-
-    // Update daily stats
+    
+    // --- Update HTML ---
     rohanTodayEl.textContent = rohanToday;
     malharTodayEl.textContent = malharToday;
-
-    // NEW: Update total stats
     document.getElementById('rohan-total').textContent = rohanTotal;
     document.getElementById('malhar-total').textContent = malharTotal;
 
-
-    // --- Total Notes by Category Logic (Unchanged) ---
-    const totals = { /* ... rest of function is unchanged ... */ };
-    for (const note of notes) {
-        if (note.filepath.startsWith('GS 1/')) totals['GS 1']++;
-        else if (note.filepath.startsWith('GS 2/')) totals['GS 2']++;
-        else if (note.filepath.startsWith('GS 3/')) totals['GS 3']++;
-        else if (note.filepath.startsWith('GS 4/')) totals['GS 4']++;
-        else if (note.filepath.startsWith('Optional 1/')) totals['Optional 1']++;
-        else if (note.filepath.startsWith('Optional 2/')) totals['Optional 2']++;
-    }
-    document.getElementById('total-gs1').textContent = totals['GS 1'];
-    document.getElementById('total-gs2').textContent = totals['GS 2'];
-    document.getElementById('total-gs3').textContent = totals['GS 3'];
-    document.getElementById('total-gs4').textContent = totals['GS 4'];
-    document.getElementById('total-opt1').textContent = totals['Optional 1'];
-    document.getElementById('total-opt2').textContent = totals['Optional 2'];
+    document.getElementById('total-gs1').textContent = categoryTotals['GS 1'];
+    document.getElementById('total-gs2').textContent = categoryTotals['GS 2'];
+    document.getElementById('total-gs3').textContent = categoryTotals['GS 3'];
+    document.getElementById('total-gs4').textContent = categoryTotals['GS 4'];
+    document.getElementById('total-opt1').textContent = categoryTotals['Optional 1'];
+    document.getElementById('total-opt2').textContent = categoryTotals['Optional 2'];
 }
 
 // --- RIGHT COLUMN: RECENT NOTES ---
