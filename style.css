@@ -117,8 +117,8 @@ header {
 .divider {
     border: none;
     height: 1px;
-    background-color: #e0e6ed;
-    margin: 10px 0; /* 10px space above and below */
+    background-color: #f8f8f8; /* Matches the body background */
+    margin: 3px 0; /* 3px space above and below */
 }
 
 /* --- 4. STAT CARDS --- */
