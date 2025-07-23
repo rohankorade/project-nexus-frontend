@@ -333,7 +333,7 @@ function createNoteElement(note) {
 async function showPreview(note) {
     modalTitle.textContent = note.filename;
     modalBody.innerHTML = '<p class="loading">Loading preview...</p>';
-    modal.style.display = 'block';
+    modal.style.display = 'flex';
 
     try {
         const response = await fetch(`${API_BASE_URL}/download/${note.filename}`);

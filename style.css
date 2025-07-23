@@ -337,7 +337,6 @@ header {
 /* --- 8. PREVIEW MODAL --- */
 /* --- NEW, LARGER MODAL STYLES --- */
 .modal {
-    display: none;
     position: fixed;
     z-index: 1000;
     left: 0;
@@ -347,8 +346,7 @@ header {
     background-color: rgba(0, 0, 0, 0.6);
     backdrop-filter: blur(5px);
     -webkit-backdrop-filter: blur(5px);
-    /* Use Flexbox to center the content box */
-    display: none;
+    display: none; /* Initially hidden, JS will change this to 'flex' */
     align-items: center;
     justify-content: center;
 }
