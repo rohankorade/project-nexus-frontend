@@ -73,8 +73,8 @@ body {
 
 /* --- 3. MAIN LAYOUT & HEADER --- */
 header {
-    max-width: 1600px;
-    width: 100%;
+    max-width: none;
+    width: 95%;
     margin: 0 auto;
     padding: 0 10px;
     flex-shrink: 0; /* Prevents the header from shrinking */
@@ -217,8 +217,8 @@ header {
     gap: 20px;
     flex-grow: 1; /* This makes the container stretch to fill remaining space */
     min-height: 0; /* Flexbox trick to ensure scrolling works correctly */
-    max-width: 1600px;
-    width: 100%;
+    max-width: none;
+    width: 95%;
     margin: 0 auto;
     padding: 0 10px;
     box-sizing: border-box;
