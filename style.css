@@ -181,7 +181,7 @@ header {
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.07);
     padding: 15px 20px;
-    min-width: 400px;  /* Set a minimum width */
+    min-width: 350px;  /* Set a minimum width */
     flex-grow: 1;      /* Allow it to take up available space */
 }
 
