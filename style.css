@@ -236,7 +236,7 @@ header {
     flex-grow: 1;
 }
 #file-explorer { flex: 1; }
-#recent-notes { flex: 2; }
+#recent-notes { flex: 1; }
 
 /* --- 6. FILE EXPLORER STYLES --- */
 #breadcrumb-nav {
@@ -335,6 +335,7 @@ header {
 .note-actions button.delete-btn:hover { background-color: #c0392b; }
 
 /* --- 8. PREVIEW MODAL --- */
+/* --- NEW, LARGER MODAL STYLES --- */
 .modal {
     display: none;
     position: fixed;
@@ -343,24 +344,37 @@ header {
     top: 0;
     width: 100%;
     height: 100%;
-    overflow: auto;
     background-color: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    /* Use Flexbox to center the content box */
+    display: none;
+    align-items: center;
+    justify-content: center;
 }
+
 .modal-content {
     background-color: #fefefe;
-    margin: 5% auto;
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%;
-    max-width: 700px;
-    border-radius: 8px;
+    /* Use almost all the screen, leaving a small margin */
+    width: calc(100% - 40px);
+    height: calc(100% - 40px);
+    max-width: 1200px; /* Optional: set a max-width for very large screens */
+    margin: 0; /* Remove old margin */
+    padding: 25px;
+    border-radius: 10px;
     box-shadow: 0 5px 15px rgba(0,0,0,0.3);
     animation: fadeIn 0.3s;
+    box-sizing: border-box;
+    /* Use Flexbox to make the body scrollable */
+    display: flex;
+    flex-direction: column;
 }
+
 #preview-body {
     margin-top: 20px;
-    max-height: 70vh;
-    overflow-y: auto;
+    overflow-y: auto; /* This enables scrolling INSIDE the body */
+    flex-grow: 1;     /* This makes the body fill the available space */
+    line-height: 1.6;
 }
 .close-button {
     color: #aaa;
