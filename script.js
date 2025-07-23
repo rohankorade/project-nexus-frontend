@@ -112,6 +112,115 @@ async function fetchAndDisplayNotes() {
     }
 }
 
+function renderUploadsChart(notes) {
+    // 1. Prepare the data for the last 7 days
+    const labels = [];
+    const today = new Date();
+    for (let i = 6; i >= 0; i--) {
+        const date = new Date(today);
+        date.setDate(today.getDate() - i);
+        labels.push(date.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit' }));
+    }
+
+    // Initialize data arrays with 7 zeros
+    const rohanData = new Array(7).fill(0);
+    const malharData = new Array(7).fill(0);
+    const totalData = new Array(7).fill(0);
+
+    // 2. Process the notes to populate the data arrays
+    const sevenDaysAgo = new Date(today);
+    sevenDaysAgo.setDate(today.getDate() - 6);
+    sevenDaysAgo.setHours(0, 0, 0, 0);
+
+    notes.forEach(note => {
+        const noteDate = new Date(note.timestamp);
+        if (noteDate >= sevenDaysAgo) {
+            const diffDays = Math.floor((noteDate - sevenDaysAgo) / (1000 * 60 * 60 * 24));
+            if (diffDays >= 0 && diffDays < 7) {
+                if (note.shared_by.toLowerCase() === 'rohan') {
+                    rohanData[diffDays]++;
+                } else if (note.shared_by.toLowerCase() === 'malhar') {
+                    malharData[diffDays]++;
+                }
+                totalData[diffDays]++;
+            }
+        }
+    });
+
+    // 3. Render the chart
+    const ctx = document.getElementById('uploads-chart').getContext('2d');
+
+    // Destroy the old chart instance if it exists, to prevent bugs on refresh
+    if (uploadsChart) {
+        uploadsChart.destroy();
+    }
+
+    uploadsChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'Rohan',
+                    data: rohanData,
+                    borderColor: 'rgba(52, 152, 219, 0.8)', // Calm Blue
+                    backgroundColor: 'rgba(52, 152, 219, 0.1)',
+                    fill: true,
+                    tension: 0.4
+                },
+                {
+                    label: 'Malhar',
+                    data: malharData,
+                    borderColor: 'rgba(46, 204, 113, 0.8)', // Calm Green
+                    backgroundColor: 'rgba(46, 204, 113, 0.1)',
+                    fill: true,
+                    tension: 0.4
+                },
+                {
+                    label: 'Total',
+                    data: totalData,
+                    borderColor: 'rgba(127, 140, 141, 0.5)', // Calm Gray
+                    backgroundColor: 'rgba(127, 140, 141, 0.05)',
+                    fill: true,
+                    tension: 0.4
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        stepSize: 1 // Only show whole numbers on Y-axis
+                    },
+                    grid: {
+                        color: 'rgba(0, 0, 0, 0.05)' // Barely visible grid lines
+                    }
+                },
+                x: {
+                    grid: {
+                        display: false // Hide vertical grid lines
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    position: 'top',
+                    align: 'end',
+                    labels: {
+                        boxWidth: 12,
+                        font: {
+                            size: 10
+                        }
+                    }
+                }
+            }
+        }
+    });
+}
+
 function updateStats(notes) {
     // --- Daily & Total Stats Logic ---
     let rohanToday = 0, malharToday = 0, rohanTotal = 0, malharTotal = 0;
