@@ -128,7 +128,7 @@ header {
     display: flex;
     width: 240px;
     overflow: hidden;
-    align-items: center;
+    align-items: stretch;
 }
 .stat-name {
     background-color: #3498db;
