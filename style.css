@@ -334,6 +334,22 @@ header {
 .note-actions button.delete-btn { background-color: #e74c3c; color: white; }
 .note-actions button.delete-btn:hover { background-color: #c0392b; }
 
+/* --- NEW STYLES FOR PATH INFO IN NOTE ITEMS --- */
+.path-info {
+    font-size: 0.8rem;
+    color: #555;
+    margin: 4px 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.path-arrow {
+    color: #3498db;
+    margin: 0 5px;
+    font-weight: 600;
+}
+
 /* --- 8. PREVIEW MODAL --- */
 /* --- NEW, LARGER MODAL STYLES --- */
 .modal {

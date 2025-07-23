@@ -309,6 +309,23 @@ function createNoteElement(note) {
     }
 
     const formattedTime = new Date(note.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+    let pathInfoHtml = '';
+    if (note.filepath) {
+        const pathParts = note.filepath.split('/');
+        // Ensure the path has enough parts to avoid errors
+        if (pathParts.length >= 4) {
+            const subject = pathParts[1];
+            const microtheme = pathParts[3];
+            pathInfoHtml = `
+                <p class="path-info">
+                    <span class="path-subject">${subject}</span>
+                    <span class="path-arrow">→</span>
+                    <span class="path-microtheme">${microtheme}</span>
+                </p>
+            `;
+        }
+    }
     
     itemDiv.innerHTML = `
         <div class="note-info">
