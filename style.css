@@ -128,7 +128,7 @@ header {
     display: flex;
     width: 240px;
     overflow: hidden;
-    align-items: stretch;
+    align-items: center;
 }
 .stat-name {
     background-color: #3498db;
@@ -156,7 +156,7 @@ header {
     color: #7f8c8d;
 }
 .stat-number {
-    font-size: 1.8rem;
+    font-size: 1.5rem;
     font-weight: 700;
     color: #3498db;
     line-height: 1;
