@@ -294,16 +294,29 @@ function createNoteElement(note) {
     return itemDiv;
 }
 
-
 async function showPreview(note) {
     modalTitle.textContent = note.filename;
     modalBody.innerHTML = '<p class="loading">Loading preview...</p>';
     modal.style.display = 'block';
+
     try {
         const response = await fetch(`${API_BASE_URL}/download/${note.filename}`);
-        const markdownText = await response.text();
+        let markdownText = await response.text();
+
+        // NEW: Find all code blocks (```...```) and replace them
+        const codeBlockRegex = /```[\s\S]*?```/g;
+        const placeholder = `
+            <div class="code-placeholder">
+                <p><strong>[ 🖥️ Custom Code Block ]</strong></p>
+                <p>Content hidden in preview</p>
+            </div>
+        `;
+        markdownText = markdownText.replace(codeBlockRegex, placeholder);
+
+        // Now, convert the modified markdown to HTML
         const htmlContent = markdownConverter.makeHtml(markdownText);
         modalBody.innerHTML = htmlContent;
+
     } catch (error) {
         modalBody.innerHTML = '<p>Could not load preview.</p>';
     }

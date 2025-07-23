@@ -322,6 +322,48 @@ header {
     font-weight: bold;
     cursor: pointer;
 }
+#preview-body {
+    line-height: 1.6;
+}
+#preview-body h1, #preview-body h2, #preview-body h3 {
+    color: #2c3e50;
+    border-bottom: 1px solid #e0e6ed;
+    padding-bottom: 5px;
+    margin-top: 20px;
+    margin-bottom: 15px;
+}
+#preview-body p {
+    margin-bottom: 15px;
+}
+#preview-body ul, #preview-body ol {
+    padding-left: 25px;
+}
+#preview-body blockquote {
+    border-left: 4px solid #3498db;
+    padding-left: 15px;
+    margin-left: 0;
+    color: #555;
+    font-style: italic;
+}
+#preview-body hr {
+    border: none;
+    height: 1px;
+    background-color: #e0e6ed;
+    margin: 20px 0;
+}
+.code-placeholder {
+    background-color: #f4f7f9;
+    border: 1px dashed #ced6e0;
+    border-radius: 6px;
+    padding: 20px;
+    text-align: center;
+    margin: 15px 0;
+    color: #7f8c8d;
+}
+.code-placeholder p {
+    margin: 0;
+    font-style: italic;
+}
 
 /* --- 9. HELPER CLASSES --- */
 .hidden { display: none !important; }
