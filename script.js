@@ -513,22 +513,56 @@ async function showPreview(note) {
 }
 
 // This function now uses note.id to build the URL
+// Replace your old copyNoteContent function with this one
 async function copyNoteContent(note, buttonElement) {
+    const originalButtonHTML = buttonElement.innerHTML; // Save original state
+
     try {
         const response = await fetch(`${API_BASE_URL}/download/${note.id}`);
         if (!response.ok) throw new Error('Network response was not ok');
         const markdownText = await response.text();
-        await navigator.clipboard.writeText(markdownText);
-        
-        const originalText = buttonElement.innerHTML;
+
+        // --- NEW: Bulletproof Copy Logic ---
+        // Try the modern, secure way first
+        if (navigator.clipboard && window.isSecureContext) {
+            await navigator.clipboard.writeText(markdownText);
+        } else {
+            // Fallback for older browsers or insecure contexts (like on some mobile devices)
+            const textArea = document.createElement('textarea');
+            textArea.value = markdownText;
+            
+            // Make the textarea invisible
+            textArea.style.position = 'absolute';
+            textArea.style.left = '-9999px';
+            
+            document.body.prepend(textArea);
+            textArea.select();
+            
+            try {
+                document.execCommand('copy');
+            } catch (err) {
+                console.error('Fallback copy failed', err);
+                throw new Error('Copy command failed.');
+            } finally {
+                textArea.remove();
+            }
+        }
+
+        // Provide visual feedback to the user
         buttonElement.innerHTML = 'Copied!';
-        setTimeout(() => { buttonElement.innerHTML = originalText; }, 2000);
+        setTimeout(() => {
+            buttonElement.innerHTML = originalButtonHTML;
+        }, 2000);
+
     } catch (err) {
         console.error('Failed to copy content: ', err);
-        const originalText = buttonElement.innerHTML;
+        // Provide error feedback
         buttonElement.innerHTML = 'Error!';
         buttonElement.style.backgroundColor = '#e74c3c';
-        setTimeout(() => { buttonElement.innerHTML = originalText; buttonElement.style.backgroundColor = ''; }, 2000);
+        setTimeout(() => {
+            buttonElement.innerHTML = originalButtonHTML;
+            buttonElement.style.backgroundColor = '';
+        }, 2000);
     }
 }
 
