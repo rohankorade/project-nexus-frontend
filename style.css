@@ -236,7 +236,7 @@ header {
 /* --- 5. TWO-COLUMN EXPLORER LAYOUT --- */
 .main-container {
     display: flex;
-    gap: 20px;
+    gap: 6px;
     flex-grow: 1; /* This makes the container stretch to fill remaining space */
     min-height: 0; /* Flexbox trick to ensure scrolling works correctly */
     max-width: none;
