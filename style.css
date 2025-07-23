@@ -302,7 +302,6 @@ header {
     color: #555;
     margin: 0;
 }
-/* Replace the old .note-actions and .note-actions button rules with this block */
 
 /* The action panel container */
 .note-actions {
@@ -313,13 +312,7 @@ header {
     padding: 8px;
     box-sizing: border-box;
     border-left: 1px solid rgba(0,0,0,0.05);
-    width: 50px; /* Slim default width */
-    transition: width 0.2s ease-in-out; /* Animate the width change */
-}
-
-/* When hovering over the panel, it expands */
-.note-actions:hover {
-    width: 120px;
+    width: 120px; /* A fixed width to show icon and text */
 }
 
 /* The buttons inside the panel */
@@ -331,37 +324,28 @@ header {
     margin-left: 0;
     display: flex;
     align-items: center;
-    justify-content: center; /* Center icon by default */
+    justify-content: flex-start; /* Align icon and text to the left */
     gap: 8px;
     border: none;
     border-radius: 4px;
     cursor: pointer;
     transition: background-color 0.2s;
-    overflow: hidden; /* Hide overflowing text */
-}
-
-/* When the panel expands, buttons align content to the left */
-.note-actions:hover button {
-    justify-content: flex-start;
+    overflow: hidden;
 }
 
 /* The text label inside the button */
 .button-text {
-    white-space: nowrap; /* Prevent text from wrapping */
-    opacity: 0; /* Hidden by default */
-    transition: opacity 0.2s ease-in-out;
+    white-space: nowrap;
 }
+/* --- NOTE ACTION BUTTON COLORS (Calmer Palette) --- */
+.note-actions button.copy-btn { background-color: #7f8c8d; color: white; } /* Slate Gray */
+.note-actions button.copy-btn:hover { background-color: #626c6d; }
 
-/* When the panel expands, the text fades in */
-.note-actions:hover .button-text {
-    opacity: 1;
-}
-.note-actions button.copy-btn { background-color: #f39c12; color: white; }
-.note-actions button.copy-btn:hover { background-color: #e67e22; }
-.note-actions button.preview-btn { background-color: #9b59b6; color: white; }
-.note-actions button.preview-btn:hover { background-color: #8e44ad; }
-.note-actions button.delete-btn { background-color: #e74c3c; color: white; }
-.note-actions button.delete-btn:hover { background-color: #c0392b; }
+.note-actions button.preview-btn { background-color: #5499c7; color: white; } /* Calm Blue */
+.note-actions button.preview-btn:hover { background-color: #347aaf; }
+
+.note-actions button.delete-btn { background-color: #e57373; color: white; } /* Soft Red */
+.note-actions button.delete-btn:hover { background-color: #d32f2f; }
 
 .note-actions button svg {
     width: 16px;  /* Controls the size of the icon */
