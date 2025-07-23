@@ -315,10 +315,13 @@ function createNoteElement(note) {
     if (note.filepath) {
         const pathParts = note.filepath.split('/');
         if (pathParts.length >= 4) {
+            const paper = pathParts[0];
             const subject = pathParts[1];
             const microtheme = pathParts[3];
             pathInfoHtml = `
                 <p class="path-info">
+                    <span class="path-subject">${paper}</span>
+                    <span class="path-arrow">→</span>
                     <span class="path-subject">${subject}</span>
                     <span class="path-arrow">→</span>
                     <span class="path-microtheme">${microtheme}</span>
