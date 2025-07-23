@@ -111,8 +111,9 @@ async function fetchAndDisplayNotes() {
 }
 
 function updateStats(notes) {
-    let rohanCount = 0; let malharCount = 0;
-    //shrutuli is my babydoll
+    // --- Daily Stats Logic (Unchanged) ---
+    let rohanCount = 0; 
+    let malharCount = 0;
     const today = new Date().toISOString().slice(0, 10);
     for (const note of notes) {
         if (note.timestamp.slice(0, 10) === today) {
@@ -120,7 +121,36 @@ function updateStats(notes) {
             else if (note.shared_by.toLowerCase() === 'malhar') malharCount++;
         }
     }
-    rohanTodayEl.textContent = rohanCount; malharTodayEl.textContent = malharCount;
+    rohanTodayEl.textContent = rohanCount; 
+    malharTodayEl.textContent = malharCount;
+
+    // --- NEW: Total Notes by Category Logic ---
+    const totals = {
+        'GS 1': 0,
+        'GS 2': 0,
+        'GS 3': 0,
+        'GS 4': 0,
+        'Optional 1': 0,
+        'Optional 2': 0,
+    };
+
+    // Loop through all notes and count totals based on filepath
+    for (const note of notes) {
+        if (note.filepath.startsWith('GS 1/')) totals['GS 1']++;
+        else if (note.filepath.startsWith('GS 2/')) totals['GS 2']++;
+        else if (note.filepath.startsWith('GS 3/')) totals['GS 3']++;
+        else if (note.filepath.startsWith('GS 4/')) totals['GS 4']++;
+        else if (note.filepath.startsWith('Optional 1/')) totals['Optional 1']++;
+        else if (note.filepath.startsWith('Optional 2/')) totals['Optional 2']++;
+    }
+
+    // Update the HTML with the new totals
+    document.getElementById('total-gs1').textContent = totals['GS 1'];
+    document.getElementById('total-gs2').textContent = totals['GS 2'];
+    document.getElementById('total-gs3').textContent = totals['GS 3'];
+    document.getElementById('total-gs4').textContent = totals['GS 4'];
+    document.getElementById('total-opt1').textContent = totals['Optional 1'];
+    document.getElementById('total-opt2').textContent = totals['Optional 2'];
 }
 
 // --- RIGHT COLUMN: RECENT NOTES ---

@@ -74,7 +74,7 @@ body {
 
 /* --- 3. MAIN LAYOUT & HEADER --- */
 header {
-    max-width: 1100px;
+    max-width: 1600px;
     width: 100%;
     margin: 0 auto;
     padding: 0 10px;
@@ -156,13 +156,55 @@ header {
     line-height: 1;
 }
 
+/* --- NEW TOTAL STATS CARD STYLES --- */
+.total-stats-card {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.07);
+    padding: 15px 20px;
+}
+
+.total-stats-card h3 {
+    margin: 0 0 10px 0;
+    text-align: center;
+    font-size: 1.1rem;
+    color: #34495e;
+}
+
+.category-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid; /* Use grid for a clean layout */
+    grid-template-columns: repeat(3, 1fr); /* Creates 3 columns */
+    gap: 10px 20px; /* Row and column gap */
+}
+
+.category-list li {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+    border-bottom: 1px solid #f0f0f0;
+    padding-bottom: 5px;
+}
+
+.category-list li span {
+    color: #555;
+    margin-right: 15px;
+}
+
+.category-list li strong {
+    font-weight: 700;
+    color: #3498db;
+}
+
 /* --- 5. TWO-COLUMN EXPLORER LAYOUT --- */
 .main-container {
     display: flex;
     gap: 20px;
     flex-grow: 1; /* This makes the container stretch to fill remaining space */
     min-height: 0; /* Flexbox trick to ensure scrolling works correctly */
-    max-width: 1200px;
+    max-width: 1600px;
     width: 100%;
     margin: 0 auto;
     padding: 0 10px;
