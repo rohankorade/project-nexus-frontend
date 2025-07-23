@@ -505,23 +505,26 @@ async function showPreview(note) {
         const response = await fetch(`${API_BASE_URL}/download/${note.id}`);
         let markdownText = await response.text();
 
-        // Save raw text for copy functionality
+        // Save raw for copy functionality
         rawTextForCopy = markdownText;
 
-        // === SANITIZATION ===
-
-        // 1. Remove YAML frontmatter (--- ... ---)
+        // === 1. Remove YAML Frontmatter ===
         markdownText = markdownText.replace(/^---[\s\S]*?---\s*\n?/g, '');
 
-        // 2. Remove entire sections with specific headings
-        const sectionRemovalRegex = /^\s*##\s*(Evidence Bank|Inter-Topic Links.*|Attachments)[\s\S]*?(?=^\s*##\s|\n---\n|\z)/gim;
-        markdownText = markdownText.replace(sectionRemovalRegex, '');
+        // === 2. Remove ## Evidence Bank, ## Inter-Topic Links, ## Attachments blocks ===
+        markdownText = markdownText.replace(/^##\s*(Evidence Bank|Inter-Topic Links.*|Attachments)[\s\S]*?(?=^##\s|\Z)/gim, '');
 
-        // 3. Remove ALL code blocks (```...```)
-        const codeBlockRegex = /```[\s\S]*?```/g;
-        markdownText = markdownText.replace(codeBlockRegex, '');
+        // === 3. Remove ALL code blocks (```...```) ===
+        markdownText = markdownText.replace(/```[\s\S]*?```/g, '');
 
-        // 4. Convert cleaned Markdown to HTML
+        // === 4. Remove inline callout blocks like > [!example] ===
+        markdownText = markdownText.replace(/^\s*>\s*\[!.*?\][\s\S]*?(?=^\s*>|\Z)/gim, '');
+
+        // === 5. Remove remaining stray lines like “ze the processed link…” or inline dataview leftovers
+        markdownText = markdownText.replace(/^\s*ze the processed link.*$/gim, '');
+        markdownText = markdownText.replace(/^\s*dv\..*$/gim, '');
+
+        // === 6. Convert Markdown to HTML ===
         const htmlContent = markdownConverter.makeHtml(markdownText);
         modalBody.innerHTML = htmlContent;
 
@@ -530,7 +533,6 @@ async function showPreview(note) {
         modalBody.innerHTML = '<p class="loading">❌ Could not load preview. An error occurred.</p>';
     }
 }
-
 
 function handleModalCopy() {
     if (!rawTextForCopy) return;
