@@ -330,7 +330,7 @@ header {
     gap: 20px; /* Space between the columns */
     align-items: flex-start;
     padding: 0 20px; /* Match header side padding */
-    max-width: 1200px;
+    max-width: 1500px;
     margin: 0 auto;
 }
 
@@ -373,56 +373,56 @@ header {
 }
 
 
-* --- NEW FILE EXPLORER STYLES --- */
-.tree-level {
-    list-style: none;
-    padding-left: 20px;
+
+/* --- NEW WINDOWS-STYLE EXPLORER STYLES --- */
+
+/* Breadcrumb Navigation Bar */
+#breadcrumb-nav {
+    padding: 10px 15px;
+    border-bottom: 1px solid #e0e6ed;
+    font-size: 0.9rem;
+    color: #555;
 }
 
-.tree-item {
-    padding: 2px 0;
-}
-
-.folder-item {
+#breadcrumb-nav a {
+    color: #3498db;
+    text-decoration: none;
     font-weight: 500;
-    cursor: pointer;
-    padding: 5px;
-    border-radius: 4px;
 }
 
-.folder-item:hover {
+#breadcrumb-nav a:hover {
+    text-decoration: underline;
+}
+
+#breadcrumb-nav span {
+    margin: 0 5px;
+    color: #95a5a6;
+}
+
+/* List items in the explorer */
+.explorer-item {
+    display: flex;
+    align-items: center;
+    padding: 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.explorer-item:hover {
     background-color: #f4f7f9;
 }
 
-.folder-item span {
-    margin-right: 5px;
+.explorer-item span {
+    margin-right: 10px;
 }
 
-/* Collapsed state for folders */
-.tree-item.collapsed > ul {
-    display: none;
+/* Override for note-items inside the explorer */
+#explorer-content .note-item {
+    cursor: default;
+    padding-left: 0;
+    padding-right: 0;
 }
-
-/* Add a little triangle icon to folders */
-.tree-item > .folder-item::before {
-    content: '▶';
-    display: inline-block;
-    margin-right: 7px;
-    font-size: 0.8em;
-    transition: transform 0.2s ease-in-out;
-}
-
-/* Rotate the icon when the folder is expanded */
-.tree-item:not(.collapsed) > .folder-item::before {
-    transform: rotate(90deg);
-}
-
-/* Style for note items inside the explorer */
-.file-container .note-item {
-    padding: 8px;
-    box-shadow: none;
-    border: 1px solid #f0f0f0;
-}
-.file-container .note-item .meta {
-    font-size: 0.75rem; /* Make metadata smaller in the tree */
+#explorer-content .note-item:hover {
+    background-color: transparent;
 }

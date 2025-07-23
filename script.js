@@ -14,6 +14,7 @@ const rohanTodayEl = document.getElementById('rohan-today');
 const malharTodayEl = document.getElementById('malhar-today');
 const explorerContent = document.getElementById('explorer-content');
 const recentNotesContent = document.getElementById('recent-notes-content');
+const breadcrumbNav = document.getElementById('breadcrumb-nav');
 
 // Modal elements
 const modal = document.getElementById('preview-modal');
@@ -21,6 +22,10 @@ const modalTitle = document.getElementById('preview-title');
 const modalBody = document.getElementById('preview-body');
 const closeButton = document.querySelector('.close-button');
 const markdownConverter = new showdown.Converter();
+
+// Global state for the explorer
+let fileTree = {};
+let currentPath = [];
 
 // --- INITIALIZATION ---
 document.addEventListener('DOMContentLoaded', checkLoginStatus);
@@ -89,10 +94,14 @@ async function fetchAndDisplayNotes() {
         const response = await fetch(`${API_BASE_URL}/notes`);
         if (!response.ok) throw new Error(`API Error: ${response.status}`);
         const notes = await response.json();
-        
+
         updateStats(notes);
         displayRecentNotes(notes);
-        displayFileExplorer(notes);
+
+        // Initialize the file explorer
+        fileTree = buildFileTree(notes);
+        currentPath = []; // Reset to root
+        renderExplorerView();
 
     } catch (error) {
         console.error("Failed to fetch notes:", error);
@@ -130,43 +139,88 @@ function displayRecentNotes(notes) {
     });
 }
 
-// --- LEFT COLUMN: FILE EXPLORER ---
-function displayFileExplorer(notes) {
+
+// --- LEFT COLUMN: WINDOWS-STYLE EXPLORER ---
+function renderExplorerView() {
+    renderBreadcrumbs();
     explorerContent.innerHTML = '';
-    if (notes.length === 0) {
-        explorerContent.innerHTML = `<p class="loading">No files to explore.</p>`;
-        return;
+
+    let currentLevel = fileTree;
+    // Traverse the tree to the current path
+    for (const part of currentPath) {
+        currentLevel = currentLevel[part];
     }
 
-    const fileTree = buildFileTree(notes);
-    const treeHtml = createFileTreeHtml(fileTree);
-    explorerContent.appendChild(treeHtml);
+    const folders = Object.keys(currentLevel).filter(key => key !== '_files').sort();
+    const files = currentLevel._files ? currentLevel._files.sort((a, b) => a.filename.localeCompare(b.filename)) : [];
 
-    // Add event listeners to all folder elements
-    explorerContent.querySelectorAll('.folder-item').forEach(folder => {
-        folder.addEventListener('click', (e) => {
-            e.stopPropagation(); // Prevent parent folders from toggling
-            folder.parentElement.classList.toggle('collapsed');
+    if (folders.length === 0 && files.length === 0) {
+        explorerContent.innerHTML = `<p class="loading">This folder is empty.</p>`;
+    }
+
+    // Render folders
+    folders.forEach(folderName => {
+        const folderDiv = document.createElement('div');
+        folderDiv.className = 'explorer-item';
+        folderDiv.innerHTML = `<span>📁</span> ${folderName}`;
+        folderDiv.addEventListener('click', () => {
+            currentPath.push(folderName);
+            renderExplorerView();
         });
+        explorerContent.appendChild(folderDiv);
+    });
+
+    // Render files
+    files.forEach(note => {
+        const noteElement = createNoteElement(note);
+        explorerContent.appendChild(noteElement);
+    });
+}
+
+function renderBreadcrumbs() {
+    breadcrumbNav.innerHTML = '';
+    const homeLink = document.createElement('a');
+    homeLink.href = '#';
+    homeLink.textContent = 'Home';
+    homeLink.addEventListener('click', (e) => {
+        e.preventDefault();
+        currentPath = [];
+        renderExplorerView();
+    });
+    breadcrumbNav.appendChild(homeLink);
+
+    let pathSoFar = [];
+    currentPath.forEach((part, index) => {
+        pathSoFar.push(part);
+        const separator = document.createElement('span');
+        separator.textContent = '>';
+        breadcrumbNav.appendChild(separator);
+
+        const partLink = document.createElement('a');
+        partLink.href = '#';
+        partLink.textContent = part;
+        // Create a closure to capture the correct path for the event listener
+        const pathToNavigate = [...pathSoFar]; 
+        partLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            currentPath = pathToNavigate;
+            renderExplorerView();
+        });
+        breadcrumbNav.appendChild(partLink);
     });
 }
 
 function buildFileTree(notes) {
     const tree = {};
     notes.forEach(note => {
-        const pathParts = note.filepath.split(/\/|\\/); // Splits path by / or \
+        const pathParts = note.filepath.split(/\/|\\/);
         let currentLevel = tree;
-
         pathParts.forEach((part, index) => {
-            if (index === pathParts.length - 1) { // It's a file
-                if (!currentLevel._files) {
-                    currentLevel._files = [];
-                }
+            if (index === pathParts.length - 1) {
+                if (!currentLevel._files) currentLevel._files = [];
                 currentLevel._files.push(note);
-            } else { // It's a folder
-                if (!currentLevel[part]) {
-                    currentLevel[part] = {};
-                }
+            } else {
+                if (!currentLevel[part]) currentLevel[part] = {};
                 currentLevel = currentLevel[part];
             }
         });
@@ -253,27 +307,18 @@ async function copyNoteContent(note, buttonElement) {
     }
 }
 
-async function deleteNote(note, elementToRemove) {
+async function deleteNote(note) {
     if (!confirm(`Are you sure you want to permanently delete "${note.filename}"?`)) {
         return;
     }
-
     try {
-        // CHANGED: Now using a DELETE request to the main /api/notes endpoint
         const response = await fetch(`${API_BASE_URL}/notes`, {
             method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ filename: note.filename }) // Send filename in the body
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ filename: note.filename })
         });
-
-        if (!response.ok) {
-            throw new Error('Server responded with an error.');
-        }
-
-        fetchAndDisplayNotes();
-
+        if (!response.ok) throw new Error('Server responded with an error.');
+        fetchAndDisplayNotes(); // This now refreshes both columns
     } catch (err) {
         console.error('Failed to delete note: ', err);
         alert('Could not delete the note. Please try again.');
