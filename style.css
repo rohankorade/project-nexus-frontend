@@ -75,7 +75,7 @@ body {
 /* --- 3. MAIN LAYOUT & HEADER --- */
 header {
     max-width: none;
-    width: 95%;
+    width: 98%;
     margin: 0 auto;
     padding: 0 10px;
     flex-shrink: 0; /* Prevents the header from shrinking */
@@ -217,7 +217,7 @@ header {
     flex-grow: 1; /* This makes the container stretch to fill remaining space */
     min-height: 0; /* Flexbox trick to ensure scrolling works correctly */
     max-width: none;
-    width: 95%;
+    width: 98%;
     margin: 0 auto;
     padding: 0 10px;
     box-sizing: border-box;
@@ -242,8 +242,8 @@ header {
     overflow-y: auto; /* This enables scrolling INSIDE the column */
     flex-grow: 1;
 }
-#file-explorer { flex: 1; }
-#recent-notes { flex: 1; }
+#file-explorer { flex: 2; }
+#recent-notes { flex: 3; }
 
 /* --- 6. FILE EXPLORER STYLES --- */
 #breadcrumb-nav {
