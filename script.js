@@ -303,21 +303,30 @@ async function showPreview(note) {
         const response = await fetch(`${API_BASE_URL}/download/${note.filename}`);
         let markdownText = await response.text();
 
-        // NEW: Find all code blocks (```...```) and replace them
-        const codeBlockRegex = /```[\s\S]*?```/g;
+        // 1. Define a regex to find and remove the YAML frontmatter (---...---)
+        const frontmatterRegex = /^---[\s\S]*?---\s*/;
+        let contentOnly = markdownText.replace(frontmatterRegex, '');
+
+        // 2. Convert the content-only markdown to HTML
+        let htmlContent = markdownConverter.makeHtml(contentOnly);
+
+        // 3. Define a regex to find the <pre><code> blocks that showdown creates
+        const codeHtmlRegex = /<pre><code[\s\S]*?<\/code><\/pre>/g;
         const placeholder = `
             <div class="code-placeholder">
                 <p><strong>[ 🖥️ Custom Code Block ]</strong></p>
                 <p>Content hidden in preview</p>
             </div>
         `;
-        markdownText = markdownText.replace(codeBlockRegex, placeholder);
 
-        // Now, convert the modified markdown to HTML
-        const htmlContent = markdownConverter.makeHtml(markdownText);
+        // 4. Replace the HTML code blocks with our placeholder
+        htmlContent = htmlContent.replace(codeHtmlRegex, placeholder);
+
+        // 5. Set the final, fully processed HTML
         modalBody.innerHTML = htmlContent;
 
     } catch (error) {
+        console.error("Preview error:", error);
         modalBody.innerHTML = '<p>Could not load preview.</p>';
     }
 }
