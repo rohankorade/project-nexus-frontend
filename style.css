@@ -283,8 +283,14 @@ header {
     box-shadow: 0 2px 4px rgba(0,0,0,0.06);
     overflow: hidden;
 }
-.note-by-rohan { background-color: #eaf4fb; }
-.note-by-malhar { background-color: #eafbf1; }
+.note-by-rohan { 
+    /* background-color: #eaf4fb;  */
+    background-color: #f1f8ff; /* Soft Sky Blue */
+}
+.note-by-malhar { 
+    /* background-color: #eafbf1;  */
+    background-color: #f1f8ff; /* Soft Sky Blue */
+}
 .note-info {
     padding: 10px 12px;
     flex-grow: 1;
@@ -337,15 +343,33 @@ header {
 .button-text {
     white-space: nowrap;
 }
-/* --- NOTE ACTION BUTTON COLORS (Calmer Palette) --- */
-.note-actions button.copy-btn { background-color: #AAB7B8; color: white; } /* Cool Gray */
-.note-actions button.copy-btn:hover { background-color: #909A9B; }
+/* Copy Button – Warm Gray */
+.note-actions button.copy-btn {
+  background-color: #95a5a6; /* Muted Gray */
+  color: white;
+}
+.note-actions button.copy-btn:hover {
+  background-color: #7b8b8c;
+}
 
-.note-actions button.preview-btn { background-color: #AED6F1; color: #34495E; } /* Pastel Blue */
-.note-actions button.preview-btn:hover { background-color: #85C1E9; }
+/* Preview Button – Cool Indigo */
+.note-actions button.preview-btn {
+  background-color: #5b7db1; /* Dusty Blue */
+  color: white;
+}
+.note-actions button.preview-btn:hover {
+  background-color: #426395;
+}
 
-.note-actions button.delete-btn { background-color: #F5B7B1; color: #7B241C; } /* Soft Coral */
-.note-actions button.delete-btn:hover { background-color: #F1948A; }
+/* Delete Button – Muted Coral */
+.note-actions button.delete-btn {
+  background-color: #f1948a; /* Gentle Coral */
+  color: white;
+}
+.note-actions button.delete-btn:hover {
+  background-color: #e57373;
+}
+
 
 .note-actions button svg {
     width: 16px;  /* Controls the size of the icon */
