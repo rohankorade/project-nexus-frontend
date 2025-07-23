@@ -518,3 +518,10 @@ header {
     flex-grow: 1; /* Allows the chart to fill the card's height */
     position: relative; /* Required for chart.js responsiveness */
 }
+
+/* --- NEW: SET UNIFORM CARD HEIGHT --- */
+.total-stats-card,
+.stats-container,
+.graph-card {
+    height: 140px; /* Sets a specific, equal height for all cards */
+}
