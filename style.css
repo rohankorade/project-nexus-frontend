@@ -338,14 +338,14 @@ header {
     white-space: nowrap;
 }
 /* --- NOTE ACTION BUTTON COLORS (Calmer Palette) --- */
-.note-actions button.copy-btn { background-color: #7f8c8d; color: white; } /* Slate Gray */
-.note-actions button.copy-btn:hover { background-color: #626c6d; }
+.note-actions button.copy-btn { background-color: #AAB7B8; color: white; } /* Cool Gray */
+.note-actions button.copy-btn:hover { background-color: #909A9B; }
 
-.note-actions button.preview-btn { background-color: #5499c7; color: white; } /* Calm Blue */
-.note-actions button.preview-btn:hover { background-color: #347aaf; }
+.note-actions button.preview-btn { background-color: #AED6F1; color: #34495E; } /* Pastel Blue */
+.note-actions button.preview-btn:hover { background-color: #85C1E9; }
 
-.note-actions button.delete-btn { background-color: #e57373; color: white; } /* Soft Red */
-.note-actions button.delete-btn:hover { background-color: #d32f2f; }
+.note-actions button.delete-btn { background-color: #F5B7B1; color: #7B241C; } /* Soft Coral */
+.note-actions button.delete-btn:hover { background-color: #F1948A; }
 
 .note-actions button svg {
     width: 16px;  /* Controls the size of the icon */
