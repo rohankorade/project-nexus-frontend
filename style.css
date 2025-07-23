@@ -198,7 +198,7 @@ header {
     margin: 0;
     display: grid; /* Use grid for a clean layout */
     grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-    gap: 10px 20px; /* Row and column gap */
+    gap: 5px 10px; /* Row and column gap */
 }
 
 .category-list li {
@@ -206,12 +206,12 @@ header {
     justify-content: space-between;
     font-size: 1rem;
     border-bottom: 1px solid #f0f0f0;
-    padding-bottom: 5px;
+    padding-bottom: 3px;
 }
 
 .category-list li span {
     color: #555;
-    margin-right: 15px;
+    margin-right: 10px;
 }
 
 .category-list li strong {
