@@ -112,6 +112,13 @@ header {
     justify-content: center;      /* horizontal center */
     line-height: 1.2;
 }
+.title-sub-sub-text{
+    font-size: 0.8rem;
+    color: #7f8c8d;
+    display: inline-flex;
+    margin-top: 4px;
+    justify-content: center;      /* horizontal center */
+}
 
 
 .divider {
