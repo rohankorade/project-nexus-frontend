@@ -504,35 +504,25 @@ async function showPreview(note) {
     try {
         const response = await fetch(`${API_BASE_URL}/download/${note.id}`);
         let markdownText = await response.text();
-        
-        // Save the original raw text for the modal's copy button
+
+        // Save raw text for copy functionality
         rawTextForCopy = markdownText;
 
-        // --- NEW ROBUST SANITIZATION PROCESS ---
+        // === SANITIZATION ===
 
-        // 1. Remove the specific sections you want to hide.
-        // This regex is improved to be more robust.
-        const sectionRemovalRegex = /^(##\s*(?:Evidence Bank|Inter-Topic Links|Attachments))[\s\S]*?(?=\n##\s|\n---\n|\z)/gm;
-        let sanitizedText = markdownText.replace(sectionRemovalRegex, '');
+        // 1. Remove YAML frontmatter (--- ... ---)
+        markdownText = markdownText.replace(/^---[\s\S]*?---\s*\n?/g, '');
 
-        // 2. Remove the frontmatter.
-        const frontmatterRegex = /^---[\s\S]*?---\s*/;
-        sanitizedText = sanitizedText.replace(frontmatterRegex, '');
+        // 2. Remove entire sections with specific headings
+        const sectionRemovalRegex = /^\s*##\s*(Evidence Bank|Inter-Topic Links.*|Attachments)[\s\S]*?(?=^\s*##\s|\n---\n|\z)/gim;
+        markdownText = markdownText.replace(sectionRemovalRegex, '');
 
-        // 3. Find and replace ALL remaining code blocks (like dataviewjs) with a placeholder.
-        // This is the key step to prevent the markdown renderer from crashing.
+        // 3. Remove ALL code blocks (```...```)
         const codeBlockRegex = /```[\s\S]*?```/g;
-        const placeholder = `
-            <div class="code-placeholder">
-                <p><strong>[ 🖥️ Custom Code Block ]</strong></p>
-                <p>Content hidden in preview</p>
-            </div>
-        `;
-        sanitizedText = sanitizedText.replace(codeBlockRegex, placeholder);
+        markdownText = markdownText.replace(codeBlockRegex, '');
 
-        // 4. Now, convert the fully sanitized text to HTML
-        const htmlContent = markdownConverter.makeHtml(sanitizedText);
-        
+        // 4. Convert cleaned Markdown to HTML
+        const htmlContent = markdownConverter.makeHtml(markdownText);
         modalBody.innerHTML = htmlContent;
 
     } catch (error) {
@@ -540,6 +530,7 @@ async function showPreview(note) {
         modalBody.innerHTML = '<p class="loading">❌ Could not load preview. An error occurred.</p>';
     }
 }
+
 
 function handleModalCopy() {
     if (!rawTextForCopy) return;
