@@ -195,7 +195,7 @@ header {
     padding: 0;
     margin: 0;
     display: grid; /* Use grid for a clean layout */
-    grid-template-columns: repeat(3, 1fr); /* Creates 3 columns */
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
     gap: 10px 20px; /* Row and column gap */
 }
 
