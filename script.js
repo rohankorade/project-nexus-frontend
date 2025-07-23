@@ -300,9 +300,8 @@ function createFileTreeHtml(treeNode) {
 // createNoteElement is now a shared component for both views
 function createNoteElement(note) {
     const itemDiv = document.createElement('div');
-    itemDiv.className = 'note-item'; // Base class
+    itemDiv.className = 'note-item';
 
-    // NEW: Add user-specific class for background colors
     if (note.shared_by.toLowerCase() === 'rohan') {
         itemDiv.classList.add('note-by-rohan');
     } else if (note.shared_by.toLowerCase() === 'malhar') {
@@ -310,7 +309,7 @@ function createNoteElement(note) {
     }
 
     const formattedTime = new Date(note.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-
+    
     itemDiv.innerHTML = `
         <div class="note-info">
             <p class="filename" title="${note.filename}">${note.filename}</p>
@@ -323,69 +322,58 @@ function createNoteElement(note) {
         </div>
     `;
 
+    // Add event listeners that now pass the entire 'note' object
     itemDiv.querySelector('.preview-btn').addEventListener('click', () => showPreview(note));
     itemDiv.querySelector('.copy-btn').addEventListener('click', (event) => copyNoteContent(note, event.target));
     itemDiv.querySelector('.delete-btn').addEventListener('click', () => deleteNote(note));
-
+    
     return itemDiv;
 }
 
+// This function now uses note.id to build the URL
 async function showPreview(note) {
     modalTitle.textContent = note.filename;
     modalBody.innerHTML = '<p class="loading">Loading preview...</p>';
     modal.style.display = 'flex';
 
     try {
-        const response = await fetch(`${API_BASE_URL}/download/${note.filename}`);
+        const response = await fetch(`${API_BASE_URL}/download/${note.id}`);
         let markdownText = await response.text();
-
-        // 1. Define a regex to find and remove the YAML frontmatter (---...---)
+        
         const frontmatterRegex = /^---[\s\S]*?---\s*/;
         let contentOnly = markdownText.replace(frontmatterRegex, '');
-
-        // 2. Convert the content-only markdown to HTML
         let htmlContent = markdownConverter.makeHtml(contentOnly);
-
-        // 3. Define a regex to find the <pre><code> blocks that showdown creates
         const codeHtmlRegex = /<pre><code[\s\S]*?<\/code><\/pre>/g;
-        const placeholder = `
-            <div class="code-placeholder">
-                <p><strong>[ 🖥️ Custom Code Block ]</strong></p>
-                <p>Content hidden in preview</p>
-            </div>
-        `;
-
-        // 4. Replace the HTML code blocks with our placeholder
+        const placeholder = `<div class="code-placeholder"><p><strong>[ 🖥️ Custom Code Block ]</strong></p><p>Content hidden in preview</p></div>`;
         htmlContent = htmlContent.replace(codeHtmlRegex, placeholder);
-
-        // 5. Set the final, fully processed HTML
+        
         modalBody.innerHTML = htmlContent;
-
     } catch (error) {
-        console.error("Preview error:", error);
         modalBody.innerHTML = '<p>Could not load preview.</p>';
     }
 }
 
+// This function now uses note.id to build the URL
 async function copyNoteContent(note, buttonElement) {
     try {
-        // FIXED THE TYPO HERE: API_A_BASE_URL -> API_BASE_URL
-        const response = await fetch(`${API_BASE_URL}/download/${note.filename}`);
+        const response = await fetch(`${API_BASE_URL}/download/${note.id}`);
         if (!response.ok) throw new Error('Network response was not ok');
         const markdownText = await response.text();
         await navigator.clipboard.writeText(markdownText);
-        const originalText = buttonElement.textContent;
-        buttonElement.textContent = 'Copied!';
-        setTimeout(() => { buttonElement.textContent = originalText; }, 2000);
+        
+        const originalText = buttonElement.innerHTML;
+        buttonElement.innerHTML = 'Copied!';
+        setTimeout(() => { buttonElement.innerHTML = originalText; }, 2000);
     } catch (err) {
         console.error('Failed to copy content: ', err);
-        const originalText = buttonElement.textContent;
-        buttonElement.textContent = 'Error!';
+        const originalText = buttonElement.innerHTML;
+        buttonElement.innerHTML = 'Error!';
         buttonElement.style.backgroundColor = '#e74c3c';
-        setTimeout(() => { buttonElement.textContent = originalText; buttonElement.style.backgroundColor = ''; }, 2000);
+        setTimeout(() => { buttonElement.innerHTML = originalText; buttonElement.style.backgroundColor = ''; }, 2000);
     }
 }
 
+// This function now uses note.id to delete
 async function deleteNote(note) {
     if (!confirm(`Are you sure you want to permanently delete "${note.filename}"?`)) {
         return;
@@ -394,10 +382,10 @@ async function deleteNote(note) {
         const response = await fetch(`${API_BASE_URL}/notes`, {
             method: 'DELETE',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ filename: note.filename })
+            body: JSON.stringify({ id: note.id }) // Send the note's ID
         });
         if (!response.ok) throw new Error('Server responded with an error.');
-        fetchAndDisplayNotes(); // This now refreshes both columns
+        fetchAndDisplayNotes();
     } catch (err) {
         console.error('Failed to delete note: ', err);
         alert('Could not delete the note. Please try again.');
