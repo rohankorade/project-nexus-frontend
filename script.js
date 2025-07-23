@@ -310,10 +310,10 @@ function createNoteElement(note) {
 
     const formattedTime = new Date(note.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
+    // This part correctly calculates the path info
     let pathInfoHtml = '';
     if (note.filepath) {
         const pathParts = note.filepath.split('/');
-        // Ensure the path has enough parts to avoid errors
         if (pathParts.length >= 4) {
             const subject = pathParts[1];
             const microtheme = pathParts[3];
@@ -327,9 +327,11 @@ function createNoteElement(note) {
         }
     }
     
+    // The corrected innerHTML now includes the pathInfoHtml variable
     itemDiv.innerHTML = `
         <div class="note-info">
             <p class="filename" title="${note.filename}">${note.filename}</p>
+            ${pathInfoHtml}
             <p class="meta">By <strong>${note.shared_by}</strong> at ${formattedTime}</p>
         </div>
         <div class="note-actions">
@@ -339,7 +341,6 @@ function createNoteElement(note) {
         </div>
     `;
 
-    // Add event listeners that now pass the entire 'note' object
     itemDiv.querySelector('.preview-btn').addEventListener('click', () => showPreview(note));
     itemDiv.querySelector('.copy-btn').addEventListener('click', (event) => copyNoteContent(note, event.target));
     itemDiv.querySelector('.delete-btn').addEventListener('click', () => deleteNote(note));
