@@ -173,7 +173,7 @@ header {
 .total-stats-card h3 {
     margin: 0 0 10px 0;
     text-align: center;
-    font-size: 1.1rem;
+    font-size: 1.3rem;
     color: #34495e;
 }
 
@@ -189,7 +189,7 @@ header {
 .category-list li {
     display: flex;
     justify-content: space-between;
-    font-size: 0.9rem;
+    font-size: 1.1rem;
     border-bottom: 1px solid #f0f0f0;
     padding-bottom: 5px;
 }
@@ -500,7 +500,7 @@ header {
     background-color: #ffffff;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.07);
-    padding: 15px 20px;
+    padding: 10px 15px;
     display: flex;
     flex-direction: column;
     flex-grow: 1; /* Allows the card to take up available space */
