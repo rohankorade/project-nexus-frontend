@@ -20,13 +20,15 @@ const breadcrumbNav = document.getElementById('breadcrumb-nav');
 const modal = document.getElementById('preview-modal');
 const modalTitle = document.getElementById('preview-title');
 const modalBody = document.getElementById('preview-body');
-const closeButton = document.querySelector('.close-button');
+const modalCloseButton = document.getElementById('modal-close-button');
+const modalCopyButton = document.getElementById('modal-copy-button');
 const markdownConverter = new showdown.Converter();
 
 // Global state for the explorer
 let fileTree = {};
 let currentPath = [];
 let uploadsChart = null;
+let rawTextForCopy = '';
 
 // --- INITIALIZATION ---
 document.addEventListener('DOMContentLoaded', checkLoginStatus);
@@ -34,6 +36,9 @@ loginButton.addEventListener('click', handleLogin);
 keyInput.addEventListener('keyup', (event) => {
     if (event.key === "Enter") handleLogin();
 });
+modalCloseButton.addEventListener('click', () => { modal.style.display = "none"; });
+window.addEventListener('click', (event) => { if (event.target == modal) modal.style.display = "none"; });
+modalCopyButton.addEventListener('click', handleModalCopy);
 
 // --- AUTHENTICATION LOGIC ---
 
@@ -497,18 +502,53 @@ async function showPreview(note) {
 
     try {
         const response = await fetch(`${API_BASE_URL}/download/${note.id}`);
-        let markdownText = await response.text();
-        
+        const markdownText = await response.text();
+
+        rawTextForCopy = markdownText; // NEW: Save raw text for the copy button
+
         const frontmatterRegex = /^---[\s\S]*?---\s*/;
         let contentOnly = markdownText.replace(frontmatterRegex, '');
         let htmlContent = markdownConverter.makeHtml(contentOnly);
         const codeHtmlRegex = /<pre><code[\s\S]*?<\/code><\/pre>/g;
         const placeholder = `<div class="code-placeholder"><p><strong>[ 🖥️ Custom Code Block ]</strong></p><p>Content hidden in preview</p></div>`;
         htmlContent = htmlContent.replace(codeHtmlRegex, placeholder);
-        
+
         modalBody.innerHTML = htmlContent;
     } catch (error) {
         modalBody.innerHTML = '<p>Could not load preview.</p>';
+    }
+}
+
+function handleModalCopy() {
+    if (!rawTextForCopy) return;
+
+    const button = modalCopyButton;
+    const originalButtonHTML = button.innerHTML;
+
+    // Use the robust copy logic
+    if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(rawTextForCopy).then(() => {
+            button.innerHTML = 'Copied!';
+            setTimeout(() => { button.innerHTML = originalButtonHTML; }, 2000);
+        }).catch(err => {
+            console.error('Modern copy failed', err);
+        });
+    } else {
+        const textArea = document.createElement('textarea');
+        textArea.value = rawTextForCopy;
+        textArea.style.position = 'absolute';
+        textArea.style.left = '-9999px';
+        document.body.prepend(textArea);
+        textArea.select();
+        try {
+            document.execCommand('copy');
+            button.innerHTML = 'Copied!';
+            setTimeout(() => { button.innerHTML = originalButtonHTML; }, 2000);
+        } catch (err) {
+            console.error('Fallback copy failed', err);
+        } finally {
+            textArea.remove();
+        }
     }
 }
 

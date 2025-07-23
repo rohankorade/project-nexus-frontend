@@ -97,8 +97,13 @@
 
     <div id="preview-modal" class="modal">
         <div class="modal-content">
-            <span class="close-button">&times;</span>
-            <h3 id="preview-title"></h3>
+            <div class="modal-header">
+                <h3 id="preview-title"></h3>
+                <div class="modal-actions">
+                    <button id="modal-copy-button" title="Copy Raw Text">📋 Copy Raw Text</button>
+                    <span id="modal-close-button" class="close-button">&times;</span>
+                </div>
+            </div>
             <div id="preview-body"></div>
         </div>
     </div>

@@ -531,3 +531,46 @@ header {
     flex-grow: 1; /* Allows the chart to fill the card's height */
     position: relative; /* Required for chart.js responsiveness */
 }
+
+/* --- NEW MODAL HEADER STYLES --- */
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #e0e6ed;
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+}
+
+.modal-header h3 {
+    margin: 0;
+    color: #2c3e50;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.modal-actions {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+#modal-copy-button {
+    background-color: #AAB7B8; /* Cool Gray */
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+#modal-copy-button:hover {
+    background-color: #909A9B;
+}
