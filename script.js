@@ -110,31 +110,42 @@ async function fetchAndDisplayNotes() {
     }
 }
 
+// Replace the old updateStats function with this one
 function updateStats(notes) {
-    // --- Daily Stats Logic (Unchanged) ---
-    let rohanCount = 0; 
-    let malharCount = 0;
+    // --- Daily & Total Stats Logic ---
+    let rohanToday = 0;
+    let malharToday = 0;
+    let rohanTotal = 0;
+    let malharTotal = 0;
+
     const today = new Date().toISOString().slice(0, 10);
+
     for (const note of notes) {
+        // Check who uploaded for total counts
+        if (note.shared_by.toLowerCase() === 'rohan') {
+            rohanTotal++;
+        } else if (note.shared_by.toLowerCase() === 'malhar') {
+            malharTotal++;
+        }
+
+        // Check if it was today for daily counts
         if (note.timestamp.slice(0, 10) === today) {
-            if (note.shared_by.toLowerCase() === 'rohan') rohanCount++;
-            else if (note.shared_by.toLowerCase() === 'malhar') malharCount++;
+            if (note.shared_by.toLowerCase() === 'rohan') rohanToday++;
+            else if (note.shared_by.toLowerCase() === 'malhar') malharToday++;
         }
     }
-    rohanTodayEl.textContent = rohanCount; 
-    malharTodayEl.textContent = malharCount;
 
-    // --- NEW: Total Notes by Category Logic ---
-    const totals = {
-        'GS 1': 0,
-        'GS 2': 0,
-        'GS 3': 0,
-        'GS 4': 0,
-        'Optional 1': 0,
-        'Optional 2': 0,
-    };
+    // Update daily stats
+    rohanTodayEl.textContent = rohanToday;
+    malharTodayEl.textContent = malharToday;
 
-    // Loop through all notes and count totals based on filepath
+    // NEW: Update total stats
+    document.getElementById('rohan-total').textContent = rohanTotal;
+    document.getElementById('malhar-total').textContent = malharTotal;
+
+
+    // --- Total Notes by Category Logic (Unchanged) ---
+    const totals = { /* ... rest of function is unchanged ... */ };
     for (const note of notes) {
         if (note.filepath.startsWith('GS 1/')) totals['GS 1']++;
         else if (note.filepath.startsWith('GS 2/')) totals['GS 2']++;
@@ -143,8 +154,6 @@ function updateStats(notes) {
         else if (note.filepath.startsWith('Optional 1/')) totals['Optional 1']++;
         else if (note.filepath.startsWith('Optional 2/')) totals['Optional 2']++;
     }
-
-    // Update the HTML with the new totals
     document.getElementById('total-gs1').textContent = totals['GS 1'];
     document.getElementById('total-gs2').textContent = totals['GS 2'];
     document.getElementById('total-gs3').textContent = totals['GS 3'];

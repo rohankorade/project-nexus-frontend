@@ -92,12 +92,12 @@ header {
     line-height: 1.1;
 }
 .title-main-text {
-    font-size: 3.5rem;
+    font-size: 4.8rem;
     font-weight: 700;
     color: #2c3e50;
 }
 .title-sub-text {
-    font-size: 1rem;
+    font-size: 1.7rem;
     font-weight: 500;
     color: #ffffff;
     background-color: #3498db;
@@ -141,9 +141,14 @@ header {
     box-sizing: border-box;
 }
 .stat-body {
-    padding: 10px 15px;
-    text-align: right;
+    display: flex; /* This is the key change */
+    justify-content: space-around;
+    align-items: center;
     flex-grow: 1;
+    padding: 10px 15px;
+}
+.stat-group {
+    text-align: center;
 }
 .stat-title {
     font-size: 0.8rem;
