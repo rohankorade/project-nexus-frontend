@@ -224,7 +224,12 @@ function renderUploadsChart(notes) {
 function updateStats(notes) {
     // --- Daily & Total Stats Logic ---
     let rohanToday = 0, malharToday = 0, rohanTotal = 0, malharTotal = 0;
-    const today = new Date().toISOString().slice(0, 10);
+    
+    // Get today's date components in the user's local timezone
+    const today = new Date();
+    const todayYear = today.getFullYear();
+    const todayMonth = today.getMonth();
+    const todayDay = today.getDate();
 
     // --- Category Totals Setup ---
     const categoryTotals = {
@@ -245,6 +250,19 @@ function updateStats(notes) {
         } else if (note.shared_by.toLowerCase() === 'malhar') {
             malharTotal++;
             if (note.timestamp.slice(0, 10) === today) malharToday++;
+        }
+
+        // --- CORRECTED "TODAY" CHECK ---
+        // Convert the note's UTC timestamp into the user's local timezone
+        const noteDate = new Date(note.timestamp);
+        // Compare the year, month, and day of the note to today's date
+        if (noteDate.getFullYear() === todayYear &&
+            noteDate.getMonth() === todayMonth &&
+            noteDate.getDate() === todayDay) {
+            
+            // If they match, increment the 'Today' counter
+            if (note.shared_by.toLowerCase() === 'rohan') rohanToday++;
+            else if (note.shared_by.toLowerCase() === 'malhar') malharToday++;
         }
 
         // Calculate category totals
