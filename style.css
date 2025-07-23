@@ -96,7 +96,7 @@ header {
 .title-main-text {
     font-size: 4.5rem;
     font-weight: 500;
-    color: #222;
+    color: #3B4B5A; /* Dark Slate Gray */
     letter-spacing: 0.3px;
 }
 .title-sub-text {
