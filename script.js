@@ -506,6 +506,11 @@ async function showPreview(note) {
 
         rawTextForCopy = markdownText; // NEW: Save raw text for the copy button
 
+        // This looks for a heading (like ## Evidence Bank) and removes everything
+        // until it hits the next heading of the same level or the end of the file.
+        const sectionRemovalRegex = /^(##\s*(Evidence Bank|Inter-Topic Links|Attachments))[\s\S]*?(?=\n##\s|\z)/gm;
+        markdownText = markdownText.replace(sectionRemovalRegex, '');
+
         const frontmatterRegex = /^---[\s\S]*?---\s*/;
         let contentOnly = markdownText.replace(frontmatterRegex, '');
         let htmlContent = markdownConverter.makeHtml(contentOnly);
