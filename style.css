@@ -85,6 +85,7 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 20px;
 }
 .main-title {
     display: flex;
@@ -494,4 +495,26 @@ header {
   40%, 60% { transform: translate3d(4px, 0, 0); }
 }
 
+/* --- NEW GRAPH CARD STYLES --- */
+.graph-card {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.07);
+    padding: 15px 20px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1; /* Allows the card to take up available space */
+    min-width: 300px; /* Ensures it doesn't get too squished */
+}
 
+.graph-card h3 {
+    margin: 0 0 10px 0;
+    text-align: center;
+    font-size: 1.1rem;
+    color: #34495e;
+}
+
+.chart-container {
+    flex-grow: 1; /* Allows the chart to fill the card's height */
+    position: relative; /* Required for chart.js responsiveness */
+}

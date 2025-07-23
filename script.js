@@ -26,6 +26,7 @@ const markdownConverter = new showdown.Converter();
 // Global state for the explorer
 let fileTree = {};
 let currentPath = [];
+let uploadsChart = null;
 
 // --- INITIALIZATION ---
 document.addEventListener('DOMContentLoaded', checkLoginStatus);
@@ -102,6 +103,7 @@ async function fetchAndDisplayNotes() {
         fileTree = buildFileTree(notes);
         currentPath = []; // Reset to root
         renderExplorerView();
+        renderUploadsChart(notes);
 
     } catch (error) {
         console.error("Failed to fetch notes:", error);
