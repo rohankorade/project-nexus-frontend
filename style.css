@@ -2,12 +2,24 @@
 /* ==         PROJECT NEXUS - FINAL CSS       == */
 /* ============================================= */
 
-/* --- 1. GENERAL & BODY STYLES --- */
+/* --- 1. FULL-SCREEN SETUP --- */
+html {
+    height: 100%;
+}
 body {
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     background-color: #f4f7f9;
     color: #333;
     margin: 0;
+    height: 100%;
+    overflow: hidden; /* Prevents the main page from scrolling */
+}
+#dashboard-content {
+    display: flex;
+    flex-direction: column; /* This is key for the vertical layout */
+    height: 100%;
+    padding: 10px; /* The 10px space at top and bottom */
+    box-sizing: border-box;
 }
 
 /* --- 2. LOGIN SCREEN STYLES --- */
@@ -63,8 +75,11 @@ body {
 /* --- 3. MAIN LAYOUT & HEADER --- */
 header {
     max-width: 1100px;
+    width: 100%;
     margin: 0 auto;
-    padding: 10px 20px 0 20px;
+    padding: 0 10px;
+    flex-shrink: 0; /* Prevents the header from shrinking */
+    box-sizing: border-box;
 }
 .top-bar {
     display: flex;
@@ -96,7 +111,7 @@ header {
     border: none;
     height: 1px;
     background-color: #e0e6ed;
-    margin: 10px 20px 10px 20px;
+    margin: 10px 0; /* 10px space above and below */
 }
 
 /* --- 4. STAT CARDS --- */
@@ -145,16 +160,19 @@ header {
 .main-container {
     display: flex;
     gap: 20px;
-    align-items: flex-start;
-    padding: 0 20px;
+    flex-grow: 1; /* This makes the container stretch to fill remaining space */
+    min-height: 0; /* Flexbox trick to ensure scrolling works correctly */
     max-width: 1200px;
+    width: 100%;
     margin: 0 auto;
+    padding: 0 10px;
+    box-sizing: border-box;
 }
 .column {
     background-color: #ffffff;
     border: 1px solid #e0e6ed;
     border-radius: 8px;
-    height: 70vh;
+    /* height: 70vh; <-- THIS IS REMOVED */
     display: flex;
     flex-direction: column;
 }
@@ -167,15 +185,11 @@ header {
 }
 .scroll-view {
     padding: 10px;
-    overflow-y: auto;
+    overflow-y: auto; /* This enables scrolling INSIDE the column */
     flex-grow: 1;
 }
-#file-explorer {
-    flex: 1;
-}
-#recent-notes {
-    flex: 2;
-}
+#file-explorer { flex: 1; }
+#recent-notes { flex: 2; }
 
 /* --- 6. FILE EXPLORER STYLES --- */
 #breadcrumb-nav {
