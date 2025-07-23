@@ -1,139 +1,16 @@
+/* ============================================= */
+/* ==         PROJECT NEXUS - FINAL CSS       == */
+/* ============================================= */
+
+/* --- 1. GENERAL & BODY STYLES --- */
 body {
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     background-color: #f4f7f9;
     color: #333;
     margin: 0;
-    padding: 20px;
 }
 
-
-main {
-    max-width: 800px;
-    margin: 0 auto;
-}
-
-.date-group {
-    margin-bottom: 30px;
-}
-
-.date-header {
-    font-size: 1.2rem;
-    font-weight: bold;
-    color: #7f8c8d;
-    padding-bottom: 10px;
-    border-bottom: 2px solid #ecf0f1;
-    margin-bottom: 15px;
-}
-
-.note-item {
-    background-color: #ffffff;
-    padding: 15px;
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
-}
-
-.note-info .filename {
-    font-weight: 600;
-}
-
-.note-info .meta {
-    font-size: 0.85rem;
-    color: #95a5a6;
-}
-
-.note-actions button {
-    background-color: #3498db;
-    color: white;
-    border: none;
-    padding: 8px 12px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 0.9rem;
-    margin-left: 10px;
-    transition: background-color 0.2s;
-}
-
-.note-actions button.preview-btn {
-    background-color: #9b59b6;
-}
-
-.note-actions button:hover {
-    background-color: #2980b9;
-}
-
-.note-actions button.preview-btn:hover {
-    background-color: #8e44ad;
-}
-
-.loading {
-    text-align: center;
-    font-size: 1.2rem;
-    color: #777;
-}
-
-.modal {
-    display: none;
-    position: fixed;
-    z-index: 1000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0, 0, 0, 0.6);
-}
-
-.modal-content {
-    background-color: #fefefe;
-    margin: 5% auto;
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%;
-    max-width: 700px;
-    border-radius: 8px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-    animation: fadeIn 0.3s;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-.close-button {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-#preview-body {
-    margin-top: 20px;
-    max-height: 70vh;
-    overflow-y: auto;
-}
-
-/* Add this to your style.css file */
-
-.note-actions button.copy-btn {
-    background-color: #f39c12; /* A nice orange color */
-}
-
-.note-actions button.copy-btn:hover {
-    background-color: #e67e22;
-}
-
-/* Add these new styles to your style.css file */
-
-.hidden {
-    display: none !important;
-}
-
+/* --- 2. LOGIN SCREEN STYLES --- */
 .login-container {
     position: fixed;
     top: 0;
@@ -148,7 +25,6 @@ main {
     background-color: rgba(255, 255, 255, 0.5);
     z-index: 2000;
 }
-
 .login-box {
     background: white;
     padding: 40px;
@@ -157,37 +33,19 @@ main {
     text-align: center;
     width: 90%;
     max-width: 400px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
 }
-
-.login-box h1 {
-    margin-top: 0;
-    color: #2c3e50;
-}
-
-.login-box p {
-    color: #7f8c8d;
-    margin-bottom: 20px;
-}
-
 #nexus-key-input {
-    width: 80%;
-    max-width: 300px;
     width: 100%;
     padding: 12px;
     border: 1px solid #ddd;
     border-radius: 8px;
     font-size: 1rem;
-    margin-bottom: 15px;
+    margin-bottom: 20px;
     box-sizing: border-box;
     text-align: center;
 }
-
 #login-button {
-    width: 80%;
-    max-width: 300px;
+    width: 100%;
     padding: 12px;
     border: none;
     background-color: #3498db;
@@ -197,93 +55,65 @@ main {
     border-radius: 8px;
     cursor: pointer;
     transition: background-color 0.2s;
-    margin-top: 5px;
 }
-
 #login-button:hover {
     background-color: #2980b9;
 }
 
-/* Shake animation for wrong key */
-.shake {
-    animation: shake 0.5s;
-}
-
-@keyframes shake {
-    10%, 90% { transform: translate3d(-1px, 0, 0); }
-    20%, 80% { transform: translate3d(2px, 0, 0); }
-    30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
-    40%, 60% { transform: translate3d(4px, 0, 0); }
-}
-
-
-.note-actions button.delete-btn {
-    background-color: #e74c3c; /* A distinct red color */
-}
-
-.note-actions button.delete-btn:hover {
-    background-color: #c0392b;
-}
-
-
-/* The main top bar container */
-/* The new top bar container */
-/* Add this new rule */
+/* --- 3. MAIN LAYOUT & HEADER --- */
 header {
-    max-width: 1100px; /* Sets a maximum width */
-    margin: 0 auto;    /* Centers the header on the page */
-    padding: 0 20px;   /* Adds some space on the sides on smaller screens */
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 40px 20px 0 20px;
 }
 .top-bar {
     display: flex;
     justify-content: space-between;
-    align-items: center; /* This vertically centers the title and stats */
-    padding: 0 0 20px 0; /* Add padding only to top and bottom */
+    align-items: center;
 }
-
-/* Main Title (Left Side) */
 .main-title {
     display: flex;
     flex-direction: column;
-    line-height: 1.2;
+    line-height: 1.1;
 }
-
 .title-main-text {
     font-size: 3.5rem;
     font-weight: 700;
     color: #2c3e50;
 }
-
 .title-sub-text {
-    font-size: 0.9rem;
+    font-size: 1rem;
     font-weight: 500;
     color: #ffffff;
     background-color: #3498db;
-    padding: 2px 10px;
+    padding: 4px 12px;
     border-radius: 6px;
     letter-spacing: 0.5px;
-    margin-top: 5px;
-    align-self: flex-start; /* Aligns highlight to the left */
+    margin-top: 8px;
+    align-self: flex-start;
+}
+.divider {
+    border: none;
+    height: 1px;
+    background-color: #e0e6ed;
+    margin: 0 20px 40px 20px;
 }
 
-/* Stats Container (Right Side) */
+/* --- 4. STAT CARDS --- */
 .stats-container {
     display: flex;
-    flex-direction: column; /* Stacks the stat cards vertically */
-    gap: 10px; /* Space between the two cards */
+    flex-direction: column;
+    gap: 10px;
 }
-
-/* A single compact stat card */
 .stat-card {
     background-color: #ffffff;
-    border-radius: 8px; /* The corner roundness */
+    border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.07);
     display: flex;
     width: 280px;
-    overflow: hidden; /* This is crucial */
-    align-items: stretch; /* This ensures both sections are the same height */
+    overflow: hidden;
+    align-items: stretch;
 }
-
 .stat-name {
     background-color: #3498db;
     color: white;
@@ -292,22 +122,18 @@ header {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 90px; /* Add this line to set a fixed width */
-    box-sizing: border-box; /* Ensures padding is included in the width */
+    width: 90px;
+    box-sizing: border-box;
 }
-
 .stat-body {
     padding: 10px 15px;
     text-align: right;
-    flex-grow: 1; /* Pushes stats to the far right */
-    border-left: 1px solid #f0f0f0; /* Adds a subtle internal line */
+    flex-grow: 1;
 }
-
 .stat-title {
     font-size: 0.8rem;
     color: #7f8c8d;
 }
-
 .stat-number {
     font-size: 1.8rem;
     font-weight: 700;
@@ -315,34 +141,23 @@ header {
     line-height: 1;
 }
 
-/* The barely-visible divider */
-.divider {
-    border: none;
-    height: 1px;
-    background-color: #e0e6ed; /* Light grey color */
-    margin: 0 20px 20px 20px; /* Top, Sides, Bottom */
-}
-
-/* --- NEW TWO-COLUMN LAYOUT STYLES --- */
-
+/* --- 5. TWO-COLUMN EXPLORER LAYOUT --- */
 .main-container {
     display: flex;
-    gap: 20px; /* Space between the columns */
+    gap: 20px;
     align-items: flex-start;
-    padding: 0 20px; /* Match header side padding */
-    max-width: 1500px;
+    padding: 0 20px;
+    max-width: 1200px;
     margin: 0 auto;
 }
-
 .column {
     background-color: #ffffff;
     border: 1px solid #e0e6ed;
     border-radius: 8px;
-    height: 70vh; /* Set a height for the columns */
+    height: 70vh;
     display: flex;
-    flex-direction: column; /* Stack header and content vertically */
+    flex-direction: column;
 }
-
 .column h2 {
     margin: 0;
     padding: 15px;
@@ -350,56 +165,39 @@ header {
     border-bottom: 1px solid #e0e6ed;
     color: #34495e;
 }
-
-/* The main content area of each column */
 .scroll-view {
     padding: 10px;
-    overflow-y: auto; /* This makes each column scrollable */
-    flex-grow: 1; /* Allows the content to fill the available height */
+    overflow-y: auto;
+    flex-grow: 1;
 }
-
-/* Specific widths for each column */
 #file-explorer {
-    flex: 1; /* Takes up 1 part of the available space */
+    flex: 1;
 }
-
 #recent-notes {
-    flex: 2; /* Takes up 2 parts of the available space */
+    flex: 2;
 }
 
-/* Style for the note items inside the new columns */
-#recent-notes .note-item {
-    margin-bottom: 10px;
-}
-
-
-
-/* --- NEW WINDOWS-STYLE EXPLORER STYLES --- */
-
-/* Breadcrumb Navigation Bar */
+/* --- 6. FILE EXPLORER STYLES --- */
 #breadcrumb-nav {
     padding: 10px 15px;
     border-bottom: 1px solid #e0e6ed;
     font-size: 0.9rem;
     color: #555;
+    white-space: nowrap;
+    overflow-x: auto;
 }
-
 #breadcrumb-nav a {
     color: #3498db;
     text-decoration: none;
     font-weight: 500;
 }
-
 #breadcrumb-nav a:hover {
     text-decoration: underline;
 }
-
 #breadcrumb-nav span {
     margin: 0 5px;
     color: #95a5a6;
 }
-
-/* List items in the explorer */
 .explorer-item {
     display: flex;
     align-items: center;
@@ -408,21 +206,116 @@ header {
     cursor: pointer;
     font-weight: 500;
 }
-
 .explorer-item:hover {
     background-color: #f4f7f9;
 }
-
 .explorer-item span {
     margin-right: 10px;
 }
 
-/* Override for note-items inside the explorer */
-#explorer-content .note-item {
-    cursor: default;
-    padding-left: 0;
-    padding-right: 0;
+/* --- 7. NOTE ITEM STYLES --- */
+.note-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.06);
+    overflow: hidden;
 }
-#explorer-content .note-item:hover {
-    background-color: transparent;
+.note-by-rohan { background-color: #eaf4fb; }
+.note-by-malhar { background-color: #eafbf1; }
+.note-info {
+    padding: 10px 12px;
+    flex-grow: 1;
+    min-width: 0;
+}
+.note-info .filename {
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin: 0 0 4px 0;
+}
+.note-info .meta {
+    font-size: 0.75rem;
+    color: #555;
+    margin: 0;
+}
+.note-actions {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 4px;
+    padding: 8px;
+    width: 110px;
+    border-left: 1px solid rgba(0,0,0,0.05);
+    box-sizing: border-box;
+}
+.note-actions button {
+    width: 100%;
+    padding: 5px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    margin-left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+.note-actions button.copy-btn { background-color: #f39c12; color: white; }
+.note-actions button.copy-btn:hover { background-color: #e67e22; }
+.note-actions button.preview-btn { background-color: #9b59b6; color: white; }
+.note-actions button.preview-btn:hover { background-color: #8e44ad; }
+.note-actions button.delete-btn { background-color: #e74c3c; color: white; }
+.note-actions button.delete-btn:hover { background-color: #c0392b; }
+
+/* --- 8. PREVIEW MODAL --- */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.6);
+}
+.modal-content {
+    background-color: #fefefe;
+    margin: 5% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 700px;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    animation: fadeIn 0.3s;
+}
+#preview-body {
+    margin-top: 20px;
+    max-height: 70vh;
+    overflow-y: auto;
+}
+.close-button {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* --- 9. HELPER CLASSES --- */
+.hidden { display: none !important; }
+.loading { text-align: center; font-size: 1rem; color: #777; padding: 20px; }
+.shake { animation: shake 0.5s; }
+@keyframes shake {
+  10%, 90% { transform: translate3d(-1px, 0, 0); }
+  20%, 80% { transform: translate3d(2px, 0, 0); }
+  30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+  40%, 60% { transform: translate3d(4px, 0, 0); }
 }

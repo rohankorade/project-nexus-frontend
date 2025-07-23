@@ -264,12 +264,33 @@ function createFileTreeHtml(treeNode) {
 // createNoteElement is now a shared component for both views
 function createNoteElement(note) {
     const itemDiv = document.createElement('div');
-    itemDiv.className = 'note-item';
+    itemDiv.className = 'note-item'; // Base class
+
+    // NEW: Add user-specific class for background colors
+    if (note.shared_by.toLowerCase() === 'rohan') {
+        itemDiv.classList.add('note-by-rohan');
+    } else if (note.shared_by.toLowerCase() === 'malhar') {
+        itemDiv.classList.add('note-by-malhar');
+    }
+
     const formattedTime = new Date(note.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    itemDiv.innerHTML = `<div class="note-info"><p class="filename">${note.filename}</p><p class="meta">By <strong>${note.shared_by}</strong> at ${formattedTime}</p></div><div class="note-actions"><button class="copy-btn">Copy</button><button class="preview-btn">Preview</button><button class="delete-btn">Delete</button></div>`;
+
+    itemDiv.innerHTML = `
+        <div class="note-info">
+            <p class="filename" title="${note.filename}">${note.filename}</p>
+            <p class="meta">By <strong>${note.shared_by}</strong> at ${formattedTime}</p>
+        </div>
+        <div class="note-actions">
+            <button class="copy-btn">📋 Copy</button>
+            <button class="preview-btn">👁️ Preview</button>
+            <button class="delete-btn">🗑️ Delete</button>
+        </div>
+    `;
+
     itemDiv.querySelector('.preview-btn').addEventListener('click', () => showPreview(note));
     itemDiv.querySelector('.copy-btn').addEventListener('click', (event) => copyNoteContent(note, event.target));
     itemDiv.querySelector('.delete-btn').addEventListener('click', () => deleteNote(note));
+
     return itemDiv;
 }
 
