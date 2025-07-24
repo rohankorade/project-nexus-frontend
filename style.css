@@ -685,3 +685,35 @@ header {
     padding-bottom: 10px;
     border-bottom: 1px solid #e0e6ed;
 }
+
+/* --- NEW FILTER BAR STYLES --- */
+.filter-bar {
+    padding: 5px 15px 10px 15px;
+    border-bottom: 1px solid #e0e6ed;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.9rem;
+}
+
+.filter-bar span {
+    font-weight: 600;
+    color: #555;
+}
+
+.filter-bar button {
+    background-color: #f0f0f0;
+    color: #333;
+    border: 1px solid #ddd;
+    border-radius: 15px;
+    padding: 4px 12px;
+    font-size: 0.8rem;
+    cursor: pointer;
+}
+
+.filter-bar button.active,
+.filter-bar button:hover {
+    background-color: #3498db;
+    color: white;
+    border-color: #3498db;
+}

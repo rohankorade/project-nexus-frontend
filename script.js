@@ -29,6 +29,7 @@ let fileTree = {};
 let currentPath = [];
 let uploadsChart = null;
 let rawTextForCopy = '';
+let currentFilter = 'All';
 
 // --- INITIALIZATION ---
 document.addEventListener('DOMContentLoaded', checkLoginStatus);
@@ -331,8 +332,45 @@ function renderExplorerView() {
         currentLevel = currentLevel[part];
     }
 
+    // --- NEW: Filter Bar Logic ---
+    // Check if we are in the "Model Answers" directory
+    if (currentPath.length === 1 && currentPath[0] === 'Model Answers') {
+        const filterBar = document.createElement('div');
+        filterBar.className = 'filter-bar';
+
+        const papers = ['All', 'GS 1', 'GS 2', 'GS 3', 'GS 4', 'Optional 1', 'Optional 2'];
+        let filterButtonsHtml = '<span>Filter:</span>';
+
+        papers.forEach(paper => {
+            const isActive = paper === currentFilter ? 'active' : '';
+            filterButtonsHtml += `<button class="filter-btn ${isActive}" data-paper="${paper}">${paper}</button>`;
+        });
+        filterBar.innerHTML = filterButtonsHtml;
+
+        // Insert the filter bar after the breadcrumbs
+        breadcrumbNav.insertAdjacentElement('afterend', filterBar);
+
+        // Add event listeners to the new filter buttons
+        document.querySelectorAll('.filter-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                currentFilter = button.getAttribute('data-paper');
+                renderExplorerView(); // Re-render the view with the new filter
+            });
+        });
+    } else {
+        currentFilter = 'All'; // Reset filter when leaving the directory
+    }
+
     const folders = Object.keys(currentLevel).filter(key => key !== '_files').sort();
-    const files = currentLevel._files ? currentLevel._files.sort((a, b) => a.filename.localeCompare(b.filename)) : [];
+    let files = currentLevel._files ? [...currentLevel._files] : []; // Create a mutable copy
+
+    // --- NEW: Apply the filter to the files list ---
+    if (currentFilter !== 'All' && currentPath.length === 1 && currentPath[0] === 'Model Answers') {
+        files = files.filter(note => note.paper === currentFilter);
+    }
+
+    // Sort files alphabetically by filename after filtering
+    files.sort((a, b) => a.filename.localeCompare(b.filename));
 
     if (folders.length === 0 && files.length === 0) {
         explorerContent.innerHTML = `<p class="loading">This folder is empty.</p>`;
