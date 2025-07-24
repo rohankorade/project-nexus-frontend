@@ -531,11 +531,16 @@ async function showPreview(note) {
         // --- NEW: USER-SPECIFIC RENDER LOGIC ---
 
         if (note.type === 'Model Answer') {
-            // Format for Model Answers
+            // For Model Answers, show the "Model Answer View"
+            // Extract the question section
+            // This regex captures everything after "### Question" until the next "### Answer"
+            // It allows for multiple lines and handles any markdown formatting
             const questionMatch = markdownText.match(/###\s*Question\s*([\s\S]*?)(?=\n###\s*Answer)/);
             const questionText = questionMatch ? questionMatch[1].trim() : 'Question not found.';
-
-            const answerMatch = markdownText.match(/###\s*Answer\s*([\s\S]*?)(?=\n---|\n##|\z)/);
+            // Extract the answer section
+            // This regex captures everything after "### Answer" until the next "---" or end of the document
+            // It allows for multiple lines and handles any markdown formatting
+            const answerMatch = markdownText.match(/###\s*Answer\s*([\s\S]*?)(?=\n---)/);
             const answerText = answerMatch ? answerMatch[1].trim() : 'Answer not found.';
 
             modalBody.innerHTML = `
