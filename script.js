@@ -40,6 +40,16 @@ modalCloseButton.addEventListener('click', () => { modal.style.display = "none";
 window.addEventListener('click', (event) => { if (event.target == modal) modal.style.display = "none"; });
 modalCopyButton.addEventListener('click', handleModalCopy);
 
+// escapeHtml function to sanitize user input
+function escapeHtml(text) {
+    return text
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
 // --- AUTHENTICATION LOGIC ---
 
 function checkLoginStatus() {
@@ -496,7 +506,7 @@ function createNoteElement(note) {
 
 // Replace the old showPreview function with this one
 async function showPreview(note) {
-    modalTitle.textContent = 'Loading...'; // Use a temporary title
+    modalTitle.textContent = 'Loading...';
     modalBody.innerHTML = '<p class="loading">Loading and formatting note...</p>';
     modal.style.display = 'flex';
 
@@ -504,87 +514,58 @@ async function showPreview(note) {
         const response = await fetch(`${API_BASE_URL}/download/${note.id}`);
         const markdownText = await response.text();
 
-        rawTextForCopy = markdownText; // Save raw text for the copy button
+        rawTextForCopy = markdownText;
+        modalTitle.textContent = note.filename;
 
-        // --- NEW: Multi-part Regex Extraction ---
+        // --- NEW: USER-SPECIFIC RENDER LOGIC ---
+        if (note.shared_by.toLowerCase() === 'malhar') {
+            // For Malhar, show the simple "Raw Text View"
 
-        // Helper function to extract a section between two headings or to the end
-        const extractSection = (text, startHeading) => {
-            const regex = new RegExp(`^##\\s*${startHeading}[\\s\\S]*?(?=\\n##\\s|\\n---\\n|\\z)`, 'gm');
-            const match = text.match(regex);
-            return match ? match[0] : null;
-        };
+            // 1. Remove only the code blocks
+            const codeBlockRegex = /```[\s\S]*?```/g;
+            let sanitizedText = markdownText.replace(codeBlockRegex, '\n--- [CUSTOM CODE BLOCK HIDDEN] ---\n');
 
-        // 1. Extract Title (H1)
-        const titleMatch = markdownText.match(/^#\s*(.*)/);
-        const title = titleMatch ? titleMatch[1] : note.filename;
-        modalTitle.textContent = title; // Update the modal title directly
+            // 2. Wrap the sanitized and escaped text in a <pre> tag
+            modalBody.innerHTML = `<pre class="raw-text-view">${escapeHtml(sanitizedText)}</pre>`;
 
-        // 2. Extract Core Concept
-        const coreConceptMatch = markdownText.match(/>\s*\[!quote\]\s*Core Concept\s*([\s\S]*?)(?=\n> \[!|##|\n---\n|\z)/);
-        const coreConceptText = coreConceptMatch ? coreConceptMatch[1].trim() : null;
+        } else {
+            // For Rohan (and others), show the detailed "Summary View"
 
-        // 3. Extract Previous Year Questions
-        const pyqMatch = markdownText.match(/>\s*\[!question\]\s*Previous Year Questions\s*([\s\S]*?)(?=\n##|\n---\n|\z)/);
-        const pyqText = pyqMatch ? pyqMatch[1].trim() : null;
+            // Helper function for extracting sections
+            const extractSection = (text, startHeading) => {
+                const regex = new RegExp(`(^##\\s*${startHeading}[\\s\\S]*?)(?=\\n---)`, 'm');
+                const match = text.match(regex);
+                return match ? match[1].trim() : null;
+            };
 
-        // 4. Extract Dimensions
-        const dimensionsMatch = markdownText.match(/(^##\s*Dimensions[\s\S]*?)(?=\n---)/m);
-        const dimensionsText = dimensionsMatch ? dimensionsMatch[1].trim() : null;
+            // Extract all the different parts of the note
+            const coreConceptMatch = markdownText.match(/>\s*\[!quote\]\s*Core Concept\s*([\s\S]*?)(?=\n> \[!|##|\n---\n|\z)/);
+            const coreConceptText = coreConceptMatch ? coreConceptMatch[1].trim() : null;
+            const pyqMatch = markdownText.match(/>\s*\[!question\]\s*Previous Year Questions\s*([\s\S]*?)(?=\n##|\n---\n|\z)/);
+            const pyqText = pyqMatch ? pyqMatch[1].trim() : null;
+            const dimensionsText = extractSection(markdownText, "Dimensions");
+            const introsMatch = markdownText.match(/###\s*>\s*Model Introductions\s*([\s\S]*?)(?=\n###\s*>\s*Model Conclusions)/);
+            const introsText = introsMatch ? introsMatch[1].trim() : null;
+            const conclusionsMatch = markdownText.match(/###\s*>\s*Model Conclusions\s*([\s\S]*?)(?=\n---)/);
+            const conclusionsText = conclusionsMatch ? conclusionsMatch[1].trim() : null;
 
-        // 5. Extract Answer Writing Toolkit and its subsections
-        const introsMatch = markdownText.match(/###\s*>\s*Model Introductions\s*([\s\S]*?)(?=\n###\s*>\s*Model Conclusions)/);
-        const introsText = introsMatch ? introsMatch[1].trim() : null;
-    
-        // 6. Extract Model Conclusions
-        const conclusionsMatch = markdownText.match(/###\s*>\s*Model Conclusions\s*([\s\S]*?)(?=\n---)/);
-        const conclusionsText = conclusionsMatch ? conclusionsMatch[1].trim() : null;
-
-        // --- Build Custom HTML from Extracted Parts ---
-        let finalHtml = '';
-
-        if (coreConceptText) {
-            finalHtml += `
-                <div class="summary-section">
-                    <h4 class="summary-section-title">💡 Core Concept</h4>
-                    <div class="summary-callout">${markdownConverter.makeHtml(coreConceptText)}</div>
-                </div>
-            `;
+            // Build the custom HTML from the extracted parts
+            let finalHtml = '';
+            if (coreConceptText) finalHtml += `<div class="summary-section"><h4 class="summary-section-title">💡 Core Concept</h4><div class="summary-callout">${markdownConverter.makeHtml(coreConceptText)}</div></div>`;
+            if (pyqText) finalHtml += `<div class="summary-section"><h4 class="summary-section-title">❓ Previous Year Questions</h4><div class="summary-callout">${markdownConverter.makeHtml(pyqText)}</div></div>`;
+            if (dimensionsText) finalHtml += `<div class="summary-section">${markdownConverter.makeHtml(dimensionsText)}</div>`;
+            if (introsText || conclusionsText) {
+                finalHtml += `<div class="summary-section"><h4 class="summary-section-title">✍️ Answer Writing Toolkit</h4><div class="toolkit-container">${introsText ? `<div class="toolkit-column">${markdownConverter.makeHtml("### Introductions\n" + introsText)}</div>` : ''}${conclusionsText ? `<div class="toolkit-column">${markdownConverter.makeHtml("### Conclusions\n" + conclusionsText)}</div>` : ''}</div></div>`;
+            }
+            modalBody.innerHTML = finalHtml;
         }
-        if (pyqText) {
-            finalHtml += `
-                <div class="summary-section">
-                    <h4 class="summary-section-title">❓ Previous Year Questions</h4>
-                    <div class="summary-callout">${markdownConverter.makeHtml(pyqText)}</div>
-                </div>
-            `;
-        }
-        if (dimensionsText) {
-            finalHtml += `
-                <div class="summary-section">
-                    ${markdownConverter.makeHtml(dimensionsText)}
-                </div>
-            `;
-        }
-        if (introsText || conclusionsText) {
-            finalHtml += `
-                <div class="summary-section">
-                    <h4 class="summary-section-title">✍️ Answer Writing Toolkit</h4>
-                    <div class="toolkit-container">
-                        ${introsText ? `<div class="toolkit-column">${markdownConverter.makeHtml("### Introductions\n" + introsText)}</div>` : ''}
-                        ${conclusionsText ? `<div class="toolkit-column">${markdownConverter.makeHtml("### Conclusions\n" + conclusionsText)}</div>` : ''}
-                    </div>
-                </div>
-            `;
-        }
-
-        modalBody.innerHTML = finalHtml;
 
     } catch (error) {
         console.error("Preview failed:", error);
         modalBody.innerHTML = '<p class="loading">❌ Could not load or format preview.</p>';
     }
 }
+
 
 function handleModalCopy() {
     if (!rawTextForCopy) return;
