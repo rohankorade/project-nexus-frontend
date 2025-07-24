@@ -461,9 +461,11 @@ function createNoteElement(note) {
         if (pathParts[0] === 'Uncategorized') {
             pathInfoHtml = `<p class="path-info path-uncategorized">Uncategorized</p>`;
         } else if (pathParts.length >= 4) {
+            const paper = pathParts[0];
             const subject = pathParts[1];
+            const theme = pathParts[2];
             const microtheme = pathParts[3];
-            pathInfoHtml = `<p class="path-info"><span class="path-subject">${subject}</span><span class="path-arrow">→</span><span class="path-microtheme">${microtheme}</span></p>`;
+            pathInfoHtml = `<p class="path-info"><span class="path-paper">${paper}</span><span class="path-arrow">→</span><span class="path-subject">${subject}</span><span class="path-arrow">→</span><span class="path-theme">${theme}</span><span class="path-arrow">→</span><span class="path-microtheme">${microtheme}</span></p>`;
         }
     }
 
