@@ -529,7 +529,7 @@ async function showPreview(note) {
         modalTitle.textContent = note.filename;
 
         // --- NEW: USER-SPECIFIC RENDER LOGIC ---
-        if (note.shared_by.toLowerCase() === 'malhar') {
+        if (note.type === 'Uncategorized' || note.shared_by.toLowerCase() === 'malhar') {
             // For Malhar, show the simple "Raw Text View"
 
             // 1. Remove only the code blocks

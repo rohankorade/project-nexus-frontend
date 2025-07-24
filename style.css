@@ -647,14 +647,14 @@ header {
 }
 
 .type-interface-note {
-    background-color: #a9cce3;
-    color: #1a5276;
+    background-color: #d6eaf8;
+    color: #1b4f72;
 }
 .type-model-answer {
-    background-color: #f5b041;
-    color: #6e2c00;
+    background-color: #f8d8aa;
+    color: #8b4f17;
 }
 .type-uncategorized {
-    background-color: #cacfd2;
-    color: #2c3e50;
+    background-color: #e5e8e8;
+    color: #515a5a;
 }
