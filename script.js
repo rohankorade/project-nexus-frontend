@@ -494,43 +494,98 @@ function createNoteElement(note) {
     return itemDiv;
 }
 
-// This function now uses note.id to build the URL
 // Replace the old showPreview function with this one
 async function showPreview(note) {
-    modalTitle.textContent = note.filename;
-    modalBody.innerHTML = '<p class="loading">Loading preview...</p>';
+    modalTitle.textContent = 'Loading...'; // Use a temporary title
+    modalBody.innerHTML = '<p class="loading">Loading and formatting note...</p>';
     modal.style.display = 'flex';
 
     try {
         const response = await fetch(`${API_BASE_URL}/download/${note.id}`);
-        let markdownText = await response.text();
+        const markdownText = await response.text();
 
-        // Save raw for copy functionality
-        rawTextForCopy = markdownText;
+        rawTextForCopy = markdownText; // Save raw text for the copy button
 
-        // === 1. Remove YAML Frontmatter ===
-        markdownText = markdownText.replace(/^---[\s\S]*?---\s*\n?/g, '');
+        // --- NEW: Multi-part Regex Extraction ---
 
-        // === 2. Remove ## Evidence Bank, ## Inter-Topic Links, ## Attachments blocks ===
-        markdownText = markdownText.replace(/^##\s*(Evidence Bank|Inter-Topic Links.*|Attachments)[\s\S]*?(?=^##\s|\Z)/gim, '');
+        // Helper function to extract a section between two headings or to the end
+        const extractSection = (text, startHeading) => {
+            const regex = new RegExp(`^##\\s*${startHeading}[\\s\\S]*?(?=\\n##\\s|\\n---\\n|\\z)`, 'gm');
+            const match = text.match(regex);
+            return match ? match[0] : null;
+        };
 
-        // === 3. Remove ALL code blocks (```...```) ===
-        markdownText = markdownText.replace(/```[\s\S]*?```/g, '');
+        // 1. Extract Title (H1)
+        const titleMatch = markdownText.match(/^#\s*(.*)/);
+        const title = titleMatch ? titleMatch[1] : note.filename;
+        modalTitle.textContent = title; // Update the modal title directly
 
-        // === 4. Remove inline callout blocks like > [!example] ===
-        markdownText = markdownText.replace(/^\s*>\s*\[!.*?\][\s\S]*?(?=^\s*>|\Z)/gim, '');
+        // 2. Extract Core Concept
+        const coreConceptMatch = markdownText.match(/>\s*\[!quote\]\s*Core Concept\s*([\s\S]*?)(?=\n> \[!|##|\n---\n|\z)/);
+        const coreConceptText = coreConceptMatch ? coreConceptMatch[1].trim() : null;
 
-        // === 5. Remove remaining stray lines like “ze the processed link…” or inline dataview leftovers
-        markdownText = markdownText.replace(/^\s*ze the processed link.*$/gim, '');
-        markdownText = markdownText.replace(/^\s*dv\..*$/gim, '');
+        // 3. Extract Previous Year Questions
+        const pyqMatch = markdownText.match(/>\s*\[!question\]\s*Previous Year Questions\s*([\s\S]*?)(?=\n##|\n---\n|\z)/);
+        const pyqText = pyqMatch ? pyqMatch[1].trim() : null;
 
-        // === 6. Convert Markdown to HTML ===
-        const htmlContent = markdownConverter.makeHtml(markdownText);
-        modalBody.innerHTML = htmlContent;
+        // 4. Extract Dimensions
+        const dimensionsText = extractSection(markdownText, "Dimensions");
+
+        // 5. Extract Answer Writing Toolkit and its subsections
+        const toolkitText = extractSection(markdownText, "Answer Writing Toolkit \\(IBC Components\\)");
+        let introsText = null;
+        let conclusionsText = null;
+        if (toolkitText) {
+            const introsMatch = toolkitText.match(/###\s*>\s*Model Introductions\s*([\s\S]*?)(?=\n###\s*>\s*|\z)/);
+            introsText = introsMatch ? introsMatch[1].trim() : null;
+
+            const conclusionsMatch = toolkitText.match(/###\s*>\s*Model Conclusions\s*([\s\S]*)/);
+            conclusionsText = conclusionsMatch ? conclusionsMatch[1].trim() : null;
+        }
+
+        // --- Build Custom HTML from Extracted Parts ---
+        let finalHtml = '';
+
+        if (coreConceptText) {
+            finalHtml += `
+                <div class="summary-section">
+                    <h4 class="summary-section-title">💡 Core Concept</h4>
+                    <div class="summary-callout">${markdownConverter.makeHtml(coreConceptText)}</div>
+                </div>
+            `;
+        }
+        if (pyqText) {
+            finalHtml += `
+                <div class="summary-section">
+                    <h4 class="summary-section-title">❓ Previous Year Questions</h4>
+                    <div class="summary-callout">${markdownConverter.makeHtml(pyqText)}</div>
+                </div>
+            `;
+        }
+        if (dimensionsText) {
+            finalHtml += `
+                <div class="summary-section">
+                    ${markdownConverter.makeHtml(dimensionsText)}
+                </div>
+            `;
+        }
+        if (introsText || conclusionsText) {
+            finalHtml += `
+                <div class="summary-section">
+                    <h4 class="summary-section-title">✍️ Answer Writing Toolkit</h4>
+                    <div class="toolkit-container">
+                        ${introsText ? `<div class="toolkit-column">${markdownConverter.makeHtml("### Introductions\n" + introsText)}</div>` : ''}
+                        ${conclusionsText ? `<div class="toolkit-column">${markdownConverter.makeHtml("### Conclusions\n" + conclusionsText)}</div>` : ''}
+                    </div>
+                </div>
+            `;
+        }
+
+        modalBody.innerHTML = finalHtml;
 
     } catch (error) {
         console.error("Preview failed:", error);
-        modalBody.innerHTML = '<p class="loading">❌ Could not load preview. An error occurred.</p>';
+        modalBody.innerHTML = '<p class="loading">❌ Could not load or format preview.</p>';
     }
 }
 

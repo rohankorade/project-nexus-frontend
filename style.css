@@ -548,45 +548,44 @@ header {
     position: relative; /* Required for chart.js responsiveness */
 }
 
-/* --- NEW MODAL HEADER STYLES --- */
-.modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid #e0e6ed;
-    padding-bottom: 15px;
-    margin-bottom: 15px;
+/* --- NEW: CUSTOM SUMMARY VIEW STYLES --- */
+
+/* Make the Copy button more noticeable */
+#modal-copy-button {
+    background-color: #3498db;
+    color: white;
+}
+#modal-copy-button:hover {
+    background-color: #2980b9;
 }
 
-.modal-header h3 {
-    margin: 0;
-    color: #2c3e50;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+/* Styling for each section in the summary */
+.summary-section {
+    margin-bottom: 25px;
+    border-left: 3px solid #e0e6ed;
+    padding-left: 20px;
 }
 
-.modal-actions {
+.summary-section-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #34495e;
+    margin: 0 0 10px 0;
+}
+
+/* Specific styles for the callout boxes */
+.summary-callout {
+    background-color: #f8f9fa;
+    border: 1px solid #e0e6ed;
+    border-radius: 6px;
+    padding: 15px;
+}
+
+/* Layout for the Answer Writing Toolkit */
+.toolkit-container {
     display: flex;
-    align-items: center;
     gap: 20px;
 }
-
-#modal-copy-button {
-    background-color: #AAB7B8; /* Cool Gray */
-    color: white;
-    border: none;
-    padding: 8px 12px;
-    border-radius: 6px;
-    font-size: 0.9rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background-color 0.2s;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-#modal-copy-button:hover {
-    background-color: #909A9B;
+.toolkit-column {
+    flex: 1; /* Each column takes half the space */
 }
