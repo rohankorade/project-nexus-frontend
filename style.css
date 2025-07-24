@@ -595,12 +595,24 @@ header {
 
 /* --- NEW: RAW TEXT PREVIEW STYLE --- */
 .raw-text-view {
-    background-color: #2c3e50; /* Dark background */
-    color: #fdfdfd; /* Light text */
-    padding: 15px;
+    background-color: #2c3e50;
+    color: #fdfdfd;
+    padding: 18px 20px;
     border-radius: 6px;
-    font-family: 'Courier New', Courier, monospace;
     font-size: 0.9rem;
-    white-space: pre-wrap; /* Respects line breaks and wraps long lines */
+    line-height: 1.5;
+    white-space: pre-wrap;
     word-wrap: break-word;
+    overflow: auto;
+    max-height: 400px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+/* Optional scrollbar customization */
+.raw-text-view::-webkit-scrollbar {
+    width: 8px;
+}
+.raw-text-view::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
 }
