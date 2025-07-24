@@ -646,16 +646,15 @@ header {
     letter-spacing: 0.5px;
 }
 
-/* Color coding for each type */
 .type-interface-note {
-    background-color: #d6eaf8; /* Light Blue */
-    color: #2874a6;
+    background-color: #1b4f72;
+    color: #d6eaf8;
 }
 .type-model-answer {
-    background-color: #fdebd0; /* Light Orange */
-    color: #b9770e;
+    background-color: #784212;
+    color: #f9e79f;
 }
 .type-uncategorized {
-    background-color: #e5e7e9; /* Light Gray */
-    color: #616a6b;
+    background-color: #2c3e50;
+    color: #ecf0f1;
 }
