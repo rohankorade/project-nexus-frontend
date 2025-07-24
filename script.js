@@ -458,9 +458,16 @@ function createNoteElement(note) {
     let pathInfoHtml = '';
     if (note.filepath) {
         const pathParts = note.filepath.split('/');
-        if (pathParts[0] === 'Uncategorized') {
-            pathInfoHtml = `<p class="path-info path-uncategorized">Uncategorized</p>`;
-        } else if (pathParts.length >= 4) {
+        if (pathParts[0] === 'Model Answers') {
+            pathInfoHtml = `<p class="path-info">
+                            <span class="path-paper">${note.paper}</span>
+                            <span class="path-arrow">→</span>
+                            <span class="path-subject">${note.subject}</span>
+                            <span class="path-arrow">→</span>
+                            <span class="path-theme">${note.theme}</span>
+                            <span class="path-arrow">→</span>
+                            <span class="path-microtheme">${note.microtheme}</span></p>`;
+        }else if (pathParts.length >= 4) {
             const paper = pathParts[0];
             const subject = pathParts[1];
             const theme = pathParts[2];
