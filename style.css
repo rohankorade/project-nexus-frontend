@@ -590,12 +590,6 @@ header {
     transition: all 0.2s ease-in-out; /* Smooth transition for all properties */
 }
 
-#modal-copy-button:hover {
-    background-color: #2980b9; /* Darker blue on hover */
-    transform: translateY(-2px); /* Slight lift effect on hover */
-    box-shadow: 0 4px 8px rgba(0,0,0,0.15); /* Stronger shadow on hover */
-}
-
 /* Styling for each section in the summary */
 .summary-section {
     margin-bottom: 25px;
@@ -638,4 +632,30 @@ header {
     white-space: pre-wrap; /* Respects line breaks and wraps long lines */
     word-wrap: break-word;
     line-height: 2; /* Increased line height for readability */
+}
+
+/* --- NEW NOTE TYPE BADGE STYLES --- */
+.note-type-badge {
+    display: inline-block;
+    padding: 3px 8px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    border-radius: 4px;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Color coding for each type */
+.type-interface-note {
+    background-color: #d6eaf8; /* Light Blue */
+    color: #2874a6;
+}
+.type-model-answer {
+    background-color: #fdebd0; /* Light Orange */
+    color: #b9770e;
+}
+.type-uncategorized {
+    background-color: #e5e7e9; /* Light Gray */
+    color: #616a6b;
 }

@@ -458,25 +458,27 @@ function createNoteElement(note) {
     let pathInfoHtml = '';
     if (note.filepath) {
         const pathParts = note.filepath.split('/');
-        if (pathParts.length >= 4) {
-            const paper = pathParts[0];
+        if (pathParts[0] === 'Uncategorized') {
+            pathInfoHtml = `<p class="path-info path-uncategorized">Uncategorized</p>`;
+        } else if (pathParts.length >= 4) {
             const subject = pathParts[1];
             const microtheme = pathParts[3];
-            pathInfoHtml = `
-                <p class="path-info">
-                    <span class="path-subject">${paper}</span>
-                    <span class="path-arrow">→</span>
-                    <span class="path-subject">${subject}</span>
-                    <span class="path-arrow">→</span>
-                    <span class="path-microtheme">${microtheme}</span>
-                </p>
-            `;
+            pathInfoHtml = `<p class="path-info"><span class="path-subject">${subject}</span><span class="path-arrow">→</span><span class="path-microtheme">${microtheme}</span></p>`;
         }
+    }
+
+    // --- Logic to create the type badge ---
+    let typeBadgeHtml = '';
+    if (note.type) {
+        // Create a CSS-friendly class name (e.g., "Model Answer" -> "model-answer")
+        const typeClass = note.type.toLowerCase().replace(/\s+/g, '-');
+        typeBadgeHtml = `<div class="note-type-badge type-${typeClass}">${note.type}</div>`;
     }
     
     // The corrected innerHTML now includes the pathInfoHtml variable
     itemDiv.innerHTML = `
         <div class="note-info">
+            ${typeBadgeHtml}
             <p class="filename" title="${note.filename}">${note.filename}</p>
             ${pathInfoHtml}
             <p class="meta">By <strong>${note.shared_by}</strong> at ${formattedTime}</p>
