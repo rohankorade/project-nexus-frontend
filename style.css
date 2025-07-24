@@ -451,6 +451,11 @@ header {
     padding-bottom: 15px;
     border-bottom: 1px solid #e0e6ed;
 }
+.modal-actions {
+    display: flex;
+    align-items: center;
+    gap: 20px; /* Adjust this value to change the space between the buttons */
+}
 
 .modal-content {
     background-color: #fefefe;
