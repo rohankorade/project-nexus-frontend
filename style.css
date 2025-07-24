@@ -475,12 +475,17 @@ header {
     flex-grow: 1;     /* This makes the body fill the available space */
     line-height: 1.6;
 }
+/* Close button styles */
 .close-button {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
+    color: #777;
+    font-size: 1.5rem;
     font-weight: bold;
     cursor: pointer;
+    line-height: 1;
+    padding: 5px;
+}
+.close-button:hover {
+    color: #333;
 }
 #preview-body {
     line-height: 1.6;

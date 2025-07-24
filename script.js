@@ -539,9 +539,9 @@ async function showPreview(note) {
             };
 
             // Extract all the different parts of the note
-            const coreConceptMatch = markdownText.match(/>\s*\[!quote\]\s*Core Concept\s*([\s\S]*?)(?=\n> \[!|##|\n---\n|\z)/);
+            const coreConceptMatch = markdownText.match(/>\s*\[!quote\]\s*Core Concept\s*([\s\S]*?)(?=\s*>\s*\[!question\]\s*Previous Year Questions)/);
             const coreConceptText = coreConceptMatch ? coreConceptMatch[1].trim() : null;
-            const pyqMatch = markdownText.match(/>\s*\[!question\]\s*Previous Year Questions\s*([\s\S]*?)(?=\n##|\n---\n|\z)/);
+            const pyqMatch = markdownText.match(/>\s*\[!question\]\s*Previous Year Questions\s*([\s\S]*?)(?=\n##\s*Dimensions)/);
             const pyqText = pyqMatch ? pyqMatch[1].trim() : null;
             const dimensionsText = extractSection(markdownText, "Dimensions");
             const introsMatch = markdownText.match(/###\s*>\s*Model Introductions\s*([\s\S]*?)(?=\n###\s*>\s*Model Conclusions)/);
