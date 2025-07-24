@@ -443,6 +443,15 @@ header {
     justify-content: center;
 }
 
+/* Modal header styles */
+.modal-header {
+    display: flex;
+    justify-content: space-between; /* Pushes title left and actions right */
+    align-items: center;            /* Vertically centers them */
+    padding-bottom: 15px;
+    border-bottom: 1px solid #e0e6ed;
+}
+
 .modal-content {
     background-color: #fefefe;
     /* Use almost all the screen, leaving a small margin */
