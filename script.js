@@ -533,18 +533,12 @@ async function showPreview(note) {
         const dimensionsText = dimensionsMatch ? dimensionsMatch[1].trim() : null;
 
         // 5. Extract Answer Writing Toolkit and its subsections
-        const toolkitText = extractSection(markdownText, "Answer Writing Toolkit \\(IBC Components\\)");
-        let introsText = null;
-        let conclusionsText = null;
-        if (toolkitText) {
-            // Get text from "Model Introductions" up to the next H3 heading
-            const introsMatch = toolkitText.match(/###\s*>\s*Model Introductions\s*([\s\S]*?)(?=\n###\s*>\s*|\z)/);
-            introsText = introsMatch ? introsMatch[1].trim() : null;
-            
-            // Get text from "Model Conclusions" up to the end of the section
-            const conclusionsMatch = toolkitText.match(/###\s*>\s*Model Conclusions\s*([\s\S]*)/);
-            conclusionsText = conclusionsMatch ? conclusionsMatch[1].trim() : null;
-        }
+        const introsMatch = markdownText.match(/###\s*>\s*Model Introductions\s*([\s\S]*?)(?=\n###\s*>\s*Model Conclusions)/);
+        const introsText = introsMatch ? introsMatch[1].trim() : null;
+    
+        // 6. Extract Model Conclusions
+        const conclusionsMatch = markdownText.match(/###\s*>\s*Model Conclusions\s*([\s\S]*?)(?=\n---)/);
+        const conclusionsText = conclusionsMatch ? conclusionsMatch[1].trim() : null;
 
         // --- Build Custom HTML from Extracted Parts ---
         let finalHtml = '';
