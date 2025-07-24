@@ -529,7 +529,25 @@ async function showPreview(note) {
         modalTitle.textContent = note.filename;
 
         // --- NEW: USER-SPECIFIC RENDER LOGIC ---
-        if (note.type === 'Uncategorized' || note.shared_by.toLowerCase() === 'malhar') {
+
+        if (note.type === 'Model Answer') {
+            // Format for Model Answers
+            const questionMatch = markdownText.match(/###\s*Question\s*([\s\S]*?)(?=\n###\s*Answer)/);
+            const questionText = questionMatch ? questionMatch[1].trim() : 'Question not found.';
+
+            const answerMatch = markdownText.match(/###\s*Answer\s*([\s\S]*?)(?=\n---|\n##|\z)/);
+            const answerText = answerMatch ? answerMatch[1].trim() : 'Answer not found.';
+
+            modalBody.innerHTML = `
+                <div class="model-answer-view">
+                    <h4>❓ Question</h4>
+                    <div>${markdownConverter.makeHtml(questionText)}</div>
+                    <h4>✍️ Answer</h4>
+                    <div>${markdownConverter.makeHtml(answerText)}</div>
+                </div>
+            `;
+
+        } else if (note.type === 'Uncategorized' || note.shared_by.toLowerCase() === 'malhar') {
             // For Malhar, show the simple "Raw Text View"
 
             // 1. Remove only the code blocks

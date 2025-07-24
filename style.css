@@ -647,9 +647,10 @@ header {
 }
 
 .type-interface-note {
-    background-color: #d6eaf8;
-    color: #1b4f72;
+    background-color: #aed6f1;  /* More vivid sky blue */
+    color: #154360;             /* Deeper steel blue */
 }
+
 .type-model-answer {
     background-color: #f8d8aa;
     color: #8b4f17;
