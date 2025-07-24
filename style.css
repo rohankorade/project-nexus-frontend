@@ -391,6 +391,9 @@ header {
   background-color: #426395;
 }
 
+.note-actions button.download-btn { background-color: #7f8c8d; color: white; } /* Slate Gray */
+.note-actions button.download-btn:hover { background-color: #626c6d; }
+
 /* Delete Button – Muted Coral */
 .note-actions button.delete-btn {
   background-color: #f1948a; /* Gentle Coral */
