@@ -544,9 +544,11 @@ async function showPreview(note) {
             const answerText = answerMatch ? answerMatch[1].trim() : 'Answer not found.';
 
             modalBody.innerHTML = `
-                <div class="model-answer-view">
+                <div class="model-answer-card question">
                     <h4>❓ Question</h4>
                     <div>${markdownConverter.makeHtml(questionText)}</div>
+                </div>
+                <div class="model-answer-card answer">
                     <h4>✍️ Answer</h4>
                     <div>${markdownConverter.makeHtml(answerText)}</div>
                 </div>
