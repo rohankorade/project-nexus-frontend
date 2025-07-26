@@ -260,6 +260,31 @@ header {
     border-bottom: 1px solid #e0e6ed;
     color: #34495e;
 }
+/* Replace the old .column h2 rule with this */
+.column-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0;
+    padding: 15px;
+    font-size: 1.1rem;
+    border-bottom: 1px solid #e0e6ed;
+    color: #34495e;
+}
+/* --- NEW SEARCH BAR STYLES --- */
+#search-input {
+    border: 1px solid #dcdfe6;
+    border-radius: 6px;
+    padding: 6px 10px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.9rem;
+    width: 250px;
+}
+
+#search-input:focus {
+    outline: none;
+    border-color: #3498db;
+}
 .scroll-view {
     padding: 10px;
     overflow-y: auto; /* This enables scrolling INSIDE the column */

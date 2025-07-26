@@ -30,6 +30,7 @@ let currentPath = [];
 let uploadsChart = null;
 let rawTextForCopy = '';
 let currentFilter = 'All';
+let searchTerm = '';
 
 // --- INITIALIZATION ---
 document.addEventListener('DOMContentLoaded', checkLoginStatus);
@@ -91,6 +92,13 @@ function handleLogin() {
 function showDashboard() {
     loginOverlay.classList.add('hidden');
     dashboardContent.classList.remove('hidden');
+
+    // Initialize the dashboard elements
+    document.getElementById('search-input').addEventListener('input', (e) => {
+        searchTerm = e.target.value.toLowerCase();
+        fetchAndDisplayNotes(); // Re-render everything when the user types
+    });
+
     fetchAndDisplayNotes(); // Fetch notes only after successful login
 }
 
@@ -105,12 +113,19 @@ window.onclick = (event) => {
 
 // --- CORE DATA HANDLING ---
 async function fetchAndDisplayNotes() {
-    explorerContent.innerHTML = `<p class="loading">Loading...</p>`;
-    recentNotesContent.innerHTML = `<p class="loading">Loading...</p>`;
+    // We only show loading text on the very first load
+    if (!fileTree.GS_1) { // A simple check to see if data has been loaded before
+        explorerContent.innerHTML = `<p class="loading">Loading...</p>`;
+        recentNotesContent.innerHTML = `<p class="loading">Loading...</p>`;
+    }
     try {
         const response = await fetch(`${API_BASE_URL}/notes`);
         if (!response.ok) throw new Error(`API Error: ${response.status}`);
-        const notes = await response.json();
+        let notes = await response.json();
+
+        if (searchTerm) {
+            notes = notes.filter(note => note.filename.toLowerCase().includes(searchTerm));
+        }
 
         updateStats(notes);
         displayRecentNotes(notes);
