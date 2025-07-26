@@ -327,13 +327,11 @@ function renderExplorerView() {
     renderBreadcrumbs();
     explorerContent.innerHTML = '';
 
-    // --- NEW: Cleanup Step ---
     // Find and remove any existing filter bar before we add a new one
     const existingFilterBar = document.querySelector('.filter-bar');
     if (existingFilterBar) {
         existingFilterBar.remove();
     }
-    // --- END NEW ---
 
     let currentLevel = fileTree;
     for (const part of currentPath) {
@@ -494,6 +492,19 @@ function createNoteElement(note) {
 
     const formattedTime = new Date(note.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
+    // --- Logic to create the type badge ---
+    let typeBadgeHtml = '';
+    if (note.type) {
+        // Take the part before the first '#' for the CSS class
+        const baseType = note.type.split('#')[0]; 
+        const typeClass = baseType.toLowerCase().replace(/\s+/g, '-');
+
+        // Take the full string and replace '#' with ' - ' for display
+        const displayText = note.type.replace(/#/g, ' - ');
+
+        typeBadgeHtml = `<div class="note-type-badge type-${typeClass}">${displayText}</div>`;
+    }
+
     // This part correctly calculates the path info
     let pathInfoHtml = '';
     if (note.filepath) {
@@ -514,14 +525,6 @@ function createNoteElement(note) {
             const microtheme = pathParts[3];
             pathInfoHtml = `<p class="path-info"><span class="path-paper">${paper}</span><span class="path-arrow">→</span><span class="path-subject">${subject}</span><span class="path-arrow">→</span><span class="path-theme">${theme}</span><span class="path-arrow">→</span><span class="path-microtheme">${microtheme}</span></p>`;
         }
-    }
-
-    // --- Logic to create the type badge ---
-    let typeBadgeHtml = '';
-    if (note.type) {
-        // Create a CSS-friendly class name (e.g., "Model Answer" -> "model-answer")
-        const typeClass = note.type.toLowerCase().replace(/\s+/g, '-');
-        typeBadgeHtml = `<div class="note-type-badge type-${typeClass}">${note.type}</div>`;
     }
     
     // The corrected innerHTML now includes the pathInfoHtml variable
