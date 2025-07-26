@@ -495,13 +495,17 @@ function createNoteElement(note) {
     // --- Logic to create the type badge ---
     let typeBadgeHtml = '';
     if (note.type) {
-        // Take the part before the first '#' for the CSS class
-        const baseType = note.type.split('#')[0]; 
+        const typeParts = note.type.split('#');
+        const baseType = typeParts[0];
+        const subTypes = typeParts.slice(1);
+        
         const typeClass = baseType.toLowerCase().replace(/\s+/g, '-');
-
-        // Take the full string and replace '#' with ' - ' for display
-        const displayText = note.type.replace(/#/g, ' - ');
-
+        
+        let displayText = `<span class="badge-base-type">${baseType}</span>`;
+        if (subTypes.length > 0) {
+            displayText += ` - <span class="badge-sub-type">${subTypes.join(' - ')}</span>`;
+        }
+        
         typeBadgeHtml = `<div class="note-type-badge type-${typeClass}">${displayText}</div>`;
     }
 
@@ -509,16 +513,7 @@ function createNoteElement(note) {
     let pathInfoHtml = '';
     if (note.filepath) {
         const pathParts = note.filepath.split('/');
-        if (pathParts[0] === 'Model Answers') {
-            pathInfoHtml = `<p class="path-info">
-                            <span class="path-paper">${note.paper}</span>
-                            <span class="path-arrow">→</span>
-                            <span class="path-subject">${note.subject}</span>
-                            <span class="path-arrow">→</span>
-                            <span class="path-theme">${note.theme}</span>
-                            <span class="path-arrow">→</span>
-                            <span class="path-microtheme">${note.microtheme}</span></p>`;
-        }else if (pathParts.length >= 4) {
+        if (pathParts.length >= 4) {
             const paper = pathParts[0];
             const subject = pathParts[1];
             const theme = pathParts[2];

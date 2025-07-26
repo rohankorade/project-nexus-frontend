@@ -660,6 +660,16 @@ header {
     color: #515a5a;
 }
 
+/* --- NEW BADGE SUB-TYPE STYLES --- */
+.badge-base-type {
+    font-weight: 600; /* e.g., "Model Answer" */
+}
+
+.badge-sub-type {
+    opacity: 0.7; /* Makes the sub-type text slightly faded */
+    font-weight: 500;
+}
+
 /* --- NEW MODEL ANSWER CARD STYLES --- */
 .model-answer-card {
     border-radius: 8px;
