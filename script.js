@@ -568,7 +568,7 @@ async function showPreview(note) {
 
         // --- NEW: USER-SPECIFIC RENDER LOGIC ---
 
-        if (note.type === 'Model Answer') {
+        if (note.type?.startsWith('Model Answer')) {
             // For Model Answers, show the "Model Answer View"
             // Extract the question section
             // This regex captures everything after "### Question" until the next "### Answer"
