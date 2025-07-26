@@ -490,7 +490,23 @@ function createNoteElement(note) {
         itemDiv.classList.add('note-by-malhar');
     }
 
-    const formattedTime = new Date(note.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    // 1. Define formatting options for the time part
+    const timeOptions = {
+        hour: 'numeric',
+        minute: '2-digit',
+        hour12: true
+    };
+
+    // 2. Define formatting options for the date part
+    const dateOptions = {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    };
+
+    // 3. Create the two parts and join them with the word "on"
+    const formattedTime = `${new Date(note.timestamp).toLocaleTimeString('en-US', timeOptions)} on ${new Date(note.timestamp).toLocaleDateString('en-US', dateOptions)}`;
 
     // --- Logic to create the type badge ---
     let typeBadgeHtml = '';
