@@ -599,7 +599,27 @@ async function showPreview(note) {
 
         // --- NEW: USER-SPECIFIC RENDER LOGIC ---
 
-        if (note.type?.startsWith('Model Answer')) {
+        
+        // --- Multi-Format Render Logic ---
+        if (note.type === 'Op-Ed Log') {
+            // Format for Op-Ed Logs
+            const articleRegex = /###\s*\*\*(Article \d+:[^]*?)\*\*([\s\S]*?)(?=\n###\s*\*\*|\n---)/g;
+            let finalHtml = '';
+            let match;
+
+            while ((match = articleRegex.exec(markdownText)) !== null) {
+                const articleTitle = match[1];
+                const articleContent = match[2].trim();
+                finalHtml += `
+                    <div class="summary-section">
+                        <h4 class="summary-section-title">${articleTitle}</h4>
+                        <div>${markdownConverter.makeHtml(articleContent)}</div>
+                    </div>
+                `;
+            }
+            modalBody.innerHTML = finalHtml || '<p>No articles found in this log.</p>';
+
+        } else if (note.type?.startsWith('Model Answer')) {
             // For Model Answers, show the "Model Answer View"
             // Extract the question section
             // This regex captures everything after "### Question" until the next "### Answer"

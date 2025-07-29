@@ -684,6 +684,10 @@ header {
     background-color: #e5e8e8;
     color: #515a5a;
 }
+.type-op-ed-log {
+    background-color: #f4ecf7; /* Light Lavender */
+    color: #884ea0;
+}
 
 /* --- NEW BADGE SUB-TYPE STYLES --- */
 .badge-base-type {
