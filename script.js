@@ -602,21 +602,27 @@ async function showPreview(note) {
         
         // --- Multi-Format Render Logic ---
         if (note.type === 'Op-Ed Log') {
-            // Format for Op-Ed Logs
-            const articleRegex = /###\s*\*\*(Article \d+:[^]*?)\*\*([\s\S]*?)(?=\n###\s*\*\*|\n---)/g;
+            // --- NEW: Definitive Op-Ed Log Parsing ---
+            // 1. Define regex to specifically find and remove the frontmatter
+            const frontmatterRegex = /^---[\s\S]*?---\s*/;
+            const contentAfterFrontmatter = markdownText.replace(frontmatterRegex, '');
+            
+            // 2. Split the remaining content by the '---' delimiter
+            // This now correctly ignores the frontmatter separator
+            const articles = contentAfterFrontmatter.split(/\n---\n/);
             let finalHtml = '';
-            let match;
 
-            while ((match = articleRegex.exec(markdownText)) !== null) {
-                const articleTitle = match[1];
-                const articleContent = match[2].trim();
-                finalHtml += `
-                    <div class="summary-section">
-                        <h4 class="summary-section-title">${articleTitle}</h4>
-                        <div>${markdownConverter.makeHtml(articleContent)}</div>
-                    </div>
-                `;
-            }
+            // 3. Skip the first part (the Date) and format each article
+            articles.slice(1).forEach(articleText => {
+                const trimmedText = articleText.trim();
+                if (trimmedText) {
+                    finalHtml += `
+                        <div class="summary-section">
+                            <div>${markdownConverter.makeHtml(trimmedText)}</div>
+                        </div>
+                    `;
+                }
+            });
             modalBody.innerHTML = finalHtml || '<p>No articles found in this log.</p>';
 
         } else if (note.type?.startsWith('Model Answer')) {
