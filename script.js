@@ -602,12 +602,18 @@ async function showPreview(note) {
         
         // --- Multi-Format Render Logic ---
         if (note.type === 'Op-Ed Log') {
-            // --- NEW: Op-Ed Log Parsing with Tags ---
-            // 1. Extract nexus_tags from the frontmatter
-            const tagsMatch = markdownText.match(/nexus_tags:\s*(.*)/);
+            console.log("--- DEBUG: Rendering Op-Ed Log ---");
+
+            // 1. Extract nexus_tags from the frontmatter (more robust regex)
+            const tagsMatch = markdownText.match(/nexus_tags:\s*([\s\S]*?)(?=\n\w+:|\n---)/);
+            console.log("DEBUG: tagsMatch result:", tagsMatch);
+
             let tagsHtml = '';
             if (tagsMatch && tagsMatch[1]) {
-                const tagsArray = tagsMatch[1].split(',').map(tag => tag.trim());
+                const tagContent = tagsMatch[1].replace(/-\s/g, '').trim();
+                console.log("DEBUG: Raw tag content found:", tagContent);
+                const tagsArray = tagContent.split(',').map(tag => tag.trim());
+
                 tagsHtml += '<div class="nexus-tags-container">';
                 tagsArray.forEach(tag => {
                     const parts = tag.split('#');
@@ -616,9 +622,11 @@ async function showPreview(note) {
                     tagsHtml += `<div class="nexus-tag"><strong>${key}:</strong> ${value}</div>`;
                 });
                 tagsHtml += '</div>';
+            } else {
+                console.log("DEBUG: No nexus_tags found in frontmatter.");
             }
 
-            // 2. Remove frontmatter and get articles
+            // The rest of the logic remains the same...
             const frontmatterRegex = /^---[\s\S]*?---\s*/;
             const contentAfterFrontmatter = markdownText.replace(frontmatterRegex, '');
             const articles = contentAfterFrontmatter.split(/\n---\n/);
@@ -631,7 +639,7 @@ async function showPreview(note) {
                 }
             });
 
-            // 3. Combine tags and articles
+            console.log("DEBUG: Final HTML:", tagsHtml + articlesHtml);
             modalBody.innerHTML = tagsHtml + (articlesHtml || '<p>No articles found in this log.</p>');
 
         } else if (note.type?.startsWith('Model Answer')) {
