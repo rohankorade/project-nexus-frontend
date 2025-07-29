@@ -603,7 +603,7 @@ async function showPreview(note) {
             console.log("--- DEBUG: Rendering Op-Ed Log ---");
 
             // --- NEW: Individual Field Extraction ---
-            // 1. Extract tags            
+            // 1. Extract tags
             let tagsHtml = '';
             if (note.source || note.paper || note.microtheme) {
                 tagsHtml += '<div class="nexus-tags-container">';
