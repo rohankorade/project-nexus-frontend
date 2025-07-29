@@ -550,7 +550,7 @@ function createNoteElement(note) {
             pathInfoHtml = `<p class="path-info"><span class="path-paper">${paper}</span><span class="path-arrow">→</span><span class="path-subject">${subject}</span><span class="path-arrow">→</span><span class="path-theme">${theme}</span><span class="path-arrow">→</span><span class="path-microtheme">${microtheme}</span></p>`;
         } else if (note.microtheme){
             // microtheme is available but not enough parts
-            // just show the microtheme 
+            // just show the microtheme
             pathInfoHtml = `<p class="path-info"><span class="path-microtheme">${note.microtheme}</span></p>`;
         }
     }
