@@ -618,7 +618,7 @@ async function showPreview(note) {
                 tagsArray.forEach(tag => {
                     const parts = tag.split('#');
                     const key = parts[0];
-                    const value = parts.slice(1).join('#');
+                    let value = parts.slice(1).join('#').trim().replace(/\|/g, ', ');
                     tagsHtml += `<div class="nexus-tag"><strong>${key}:</strong> ${value}</div>`;
                 });
                 tagsHtml += '</div>';
