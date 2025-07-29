@@ -604,7 +604,6 @@ async function showPreview(note) {
         if (note.type === 'Op-Ed Log') {
             console.log("--- DEBUG: Rendering Op-Ed Log ---");
 
-            if (note.type === 'Op-Ed Log') {
             // --- NEW: Individual Field Extraction ---
             // 1. Get the full frontmatter object from the note
             const fileCache = this.app.metadataCache.getFileCache(note.file);
