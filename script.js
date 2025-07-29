@@ -621,7 +621,7 @@ async function showPreview(note) {
                     tagsHtml += `<div class="nexus-tag"><strong>Relevance:</strong> ${note.paper}</div>`;
                 }
                 if (note.microtheme) {
-                    const microthemes = note.microtheme.split(',').map(item => item.trim());
+                    const microthemes = note.microtheme.split(', ').map(item => item.trim());
                     const label = microthemes.length > 1 ? 'Microthemes' : 'Microtheme';
                     const displayValue = microthemes.join(', ');
                     tagsHtml += `<div class="nexus-tag"><strong>${label}:</strong> ${displayValue}</div>`;
