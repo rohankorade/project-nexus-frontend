@@ -103,8 +103,6 @@ function showDashboard() {
 }
 
 // --- DASHBOARD & API LOGIC (from previous steps) ---
-
-closeButton.onclick = () => { modal.style.display = "none"; };
 window.onclick = (event) => {
     if (event.target == modal) {
         modal.style.display = "none";
@@ -605,22 +603,18 @@ async function showPreview(note) {
             console.log("--- DEBUG: Rendering Op-Ed Log ---");
 
             // --- NEW: Individual Field Extraction ---
-            // 1. Get the full frontmatter object from the note
-            const fileCache = this.app.metadataCache.getFileCache(note.file);
-            const frontmatter = fileCache?.frontmatter;
-
+            // 1. Extract tags            
             let tagsHtml = '';
-            if (frontmatter) {
+            if (note.source || note.paper || note.microtheme) {
                 tagsHtml += '<div class="nexus-tags-container">';
-                // Check for and create a tag for each specific field
-                if (frontmatter.source) {
-                    tagsHtml += `<div class="nexus-tag"><strong>Source:</strong> ${frontmatter.source}</div>`;
+                if (note.source) {
+                    tagsHtml += `<div class="nexus-tag"><strong>Source:</strong> ${note.source}</div>`;
                 }
-                if (frontmatter.paper) {
-                    tagsHtml += `<div class="nexus-tag"><strong>Paper:</strong> ${frontmatter.paper}</div>`;
+                if (note.paper) {
+                    tagsHtml += `<div class="nexus-tag"><strong>Paper:</strong> ${note.paper}</div>`;
                 }
-                if (frontmatter.microtheme) {
-                    tagsHtml += `<div class="nexus-tag"><strong>Microtheme:</strong> ${frontmatter.microtheme}</div>`;
+                if (note.microtheme) {
+                    tagsHtml += `<div class="nexus-tag"><strong>Microtheme:</strong> ${note.microtheme}</div>`;
                 }
                 tagsHtml += '</div>';
             }
