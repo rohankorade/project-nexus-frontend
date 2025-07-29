@@ -618,7 +618,11 @@ async function showPreview(note) {
                     tagsHtml += `<div class="nexus-tag"><strong>Source:</strong> ${note.source}</div>`;
                 }
                 if (note.paper) {
-                    tagsHtml += `<div class="nexus-tag"><strong>Relevance:</strong> ${note.paper}</div>`;
+                    const papers = [...new Set(
+                        note.paper.split(',').map(item => item.trim())
+                    )]; // Ensure unique papers
+                    const displayValue = papers.join(', ');
+                    tagsHtml += `<div class="nexus-tag"><strong>Relevance:</strong> ${displayValue}</div>`;
                 }
                 if (note.microtheme) {
                     const microthemes = [...new Set(
