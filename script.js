@@ -602,28 +602,37 @@ async function showPreview(note) {
         
         // --- Multi-Format Render Logic ---
         if (note.type === 'Op-Ed Log') {
-            // --- NEW: Definitive Op-Ed Log Parsing ---
-            // 1. Define regex to specifically find and remove the frontmatter
+            // --- NEW: Op-Ed Log Parsing with Tags ---
+            // 1. Extract nexus_tags from the frontmatter
+            const tagsMatch = markdownText.match(/nexus_tags:\s*(.*)/);
+            let tagsHtml = '';
+            if (tagsMatch && tagsMatch[1]) {
+                const tagsArray = tagsMatch[1].split(',').map(tag => tag.trim());
+                tagsHtml += '<div class="nexus-tags-container">';
+                tagsArray.forEach(tag => {
+                    const parts = tag.split('#');
+                    const key = parts[0];
+                    const value = parts.slice(1).join('#');
+                    tagsHtml += `<div class="nexus-tag"><strong>${key}:</strong> ${value}</div>`;
+                });
+                tagsHtml += '</div>';
+            }
+
+            // 2. Remove frontmatter and get articles
             const frontmatterRegex = /^---[\s\S]*?---\s*/;
             const contentAfterFrontmatter = markdownText.replace(frontmatterRegex, '');
-            
-            // 2. Split the remaining content by the '---' delimiter
-            // This now correctly ignores the frontmatter separator
             const articles = contentAfterFrontmatter.split(/\n---\n/);
-            let finalHtml = '';
+            let articlesHtml = '';
 
-            // 3. Skip the first part (the Date) and format each article
             articles.slice(1).forEach(articleText => {
                 const trimmedText = articleText.trim();
                 if (trimmedText) {
-                    finalHtml += `
-                        <div class="summary-section">
-                            <div>${markdownConverter.makeHtml(trimmedText)}</div>
-                        </div>
-                    `;
+                    articlesHtml += `<div class="summary-section"><div>${markdownConverter.makeHtml(trimmedText)}</div></div>`;
                 }
             });
-            modalBody.innerHTML = finalHtml || '<p>No articles found in this log.</p>';
+
+            // 3. Combine tags and articles
+            modalBody.innerHTML = tagsHtml + (articlesHtml || '<p>No articles found in this log.</p>');
 
         } else if (note.type?.startsWith('Model Answer')) {
             // For Model Answers, show the "Model Answer View"
