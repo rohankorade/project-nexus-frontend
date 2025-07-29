@@ -604,29 +604,29 @@ async function showPreview(note) {
         if (note.type === 'Op-Ed Log') {
             console.log("--- DEBUG: Rendering Op-Ed Log ---");
 
-            // 1. Extract nexus_tags from the frontmatter (more robust regex)
-            const tagsMatch = markdownText.match(/nexus_tags:\s*([\s\S]*?)(?=\n\w+:|\n---)/);
-            console.log("DEBUG: tagsMatch result:", tagsMatch);
+            if (note.type === 'Op-Ed Log') {
+            // --- NEW: Individual Field Extraction ---
+            // 1. Get the full frontmatter object from the note
+            const fileCache = this.app.metadataCache.getFileCache(note.file);
+            const frontmatter = fileCache?.frontmatter;
 
             let tagsHtml = '';
-            if (tagsMatch && tagsMatch[1]) {
-                const tagContent = tagsMatch[1].replace(/-\s/g, '').trim();
-                console.log("DEBUG: Raw tag content found:", tagContent);
-                const tagsArray = tagContent.split(',').map(tag => tag.trim());
-
+            if (frontmatter) {
                 tagsHtml += '<div class="nexus-tags-container">';
-                tagsArray.forEach(tag => {
-                    const parts = tag.split('#');
-                    const key = parts[0];
-                    let value = parts.slice(1).join('#').trim().replace(/\|/g, ', ');
-                    tagsHtml += `<div class="nexus-tag"><strong>${key}:</strong> ${value}</div>`;
-                });
+                // Check for and create a tag for each specific field
+                if (frontmatter.source) {
+                    tagsHtml += `<div class="nexus-tag"><strong>Source:</strong> ${frontmatter.source}</div>`;
+                }
+                if (frontmatter.paper) {
+                    tagsHtml += `<div class="nexus-tag"><strong>Paper:</strong> ${frontmatter.paper}</div>`;
+                }
+                if (frontmatter.microtheme) {
+                    tagsHtml += `<div class="nexus-tag"><strong>Microtheme:</strong> ${frontmatter.microtheme}</div>`;
+                }
                 tagsHtml += '</div>';
-            } else {
-                console.log("DEBUG: No nexus_tags found in frontmatter.");
             }
 
-            // The rest of the logic remains the same...
+            // 2. Remove frontmatter and get articles
             const frontmatterRegex = /^---[\s\S]*?---\s*/;
             const contentAfterFrontmatter = markdownText.replace(frontmatterRegex, '');
             const articles = contentAfterFrontmatter.split(/\n---\n/);
@@ -639,7 +639,7 @@ async function showPreview(note) {
                 }
             });
 
-            console.log("DEBUG: Final HTML:", tagsHtml + articlesHtml);
+            // 3. Combine tags and articles
             modalBody.innerHTML = tagsHtml + (articlesHtml || '<p>No articles found in this log.</p>');
 
         } else if (note.type?.startsWith('Model Answer')) {
