@@ -618,12 +618,14 @@ async function showPreview(note) {
                     tagsHtml += `<div class="nexus-tag"><strong>Source:</strong> ${note.source}</div>`;
                 }
                 if (note.paper) {
-                    tagsHtml += `<div class="nexus-tag"><strong>Paper:</strong> ${note.paper}</div>`;
+                    tagsHtml += `<div class="nexus-tag"><strong>Relevance:</strong> ${note.paper}</div>`;
                 }
                 if (note.microtheme) {
-                    tagsHtml += `<div class="nexus-tag"><strong>Microtheme:</strong> ${note.microtheme}</div>`;
+                    const microthemes = note.microtheme.split(',').map(item => item.trim());
+                    const label = microthemes.length > 1 ? 'Microthemes' : 'Microtheme';
+                    const displayValue = microthemes.join(', ');
+                    tagsHtml += `<div class="nexus-tag"><strong>${label}:</strong> ${displayValue}</div>`;
                 }
-                tagsHtml += '</div>';
             }
 
             // 2. Remove frontmatter and get articles
