@@ -806,3 +806,33 @@ header {
     padding-left: 15px;
     border-left: 2px solid #f0f0f0;
 }
+
+/* --- NEW CALLOUT PREVIEW STYLES --- */
+.callout-card {
+    background-color: #f8f9fa;
+    border-left: 4px solid #3498db; /* Default blue border */
+    border-radius: 0 8px 8px 0;
+    margin-bottom: 15px;
+    padding: 15px 20px;
+}
+
+.callout-card-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #34495e;
+    margin: 0 0 10px 0;
+    display: flex;
+    align-items: center;
+}
+
+.callout-card-icon {
+    margin-right: 10px;
+}
+
+/* Optional: Custom border colors for different callout types */
+.callout-card[data-callout-type="question"] {
+    border-left-color: #f39c12; /* Orange */
+}
+.callout-card[data-callout-type="example"] {
+    border-left-color: #2ecc71; /* Green */
+}

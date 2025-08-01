@@ -685,55 +685,40 @@ async function showPreview(note) {
             modalBody.innerHTML = `<pre class="raw-text-view">${escapeHtml(sanitizedText)}</pre>`;
 
         } else if (note.shared_by.toLowerCase() === 'malhar') {
-            // --- NEW: Render Malhar's notes as a structured outline ---
+            // --- NEW: Render Malhar's notes by extracting only callout blocks ---
 
-            // 1. Sanitize: Remove unwanted sections and all code blocks
-            const frontmatterRegex = /^---[\s\S]*?---\s*/;
-            let sanitizedText = markdownText.replace(frontmatterRegex, '');
-            
-            // Remove the ## Attachments section to the end of the file
-            const attachmentsRegex = /\n##\s*Attachments[\s\S]*/;
-            sanitizedText = sanitizedText.replace(attachmentsRegex, '');
+            // This regex finds all callout blocks, capturing the type, title, and content.
+            const calloutRegex = />\s*\[!(.*?)\]\s*(.*?)\n([\s\S]*?)(?=\n> \[!|\n##|\n---|```|\z)/g;
+            let finalHtml = '';
+            let match;
 
-            // NEW: Remove the ## Inter-Topic Links section up to the next HR
-            const interTopicLinksRegex = /\n##\s*Inter-Topic Links[\s\S]*?(?=\n---|\z)/;
-            sanitizedText = sanitizedText.replace(interTopicLinksRegex, '');
+            while ((match = calloutRegex.exec(markdownText)) !== null) {
+                const calloutType = match[1].trim().toLowerCase(); // e.g., "quote"
+                const calloutTitle = match[2].trim(); // e.g., "Core Concept"
+                const calloutContent = match[3].replace(/>\s?/g, '').trim(); // Clean up content lines
 
-            // Remove any other section containing a dataviewjs block
-            const sectionWithDataviewRegex = /^(##|###)\s.*[\s\S]*?```dataviewjs[\s\S]*?```[\s\S]*?(?=\n##|\n###|\z)/gm;
-            sanitizedText = sanitizedText.replace(sectionWithDataviewRegex, '');
-            
-            // Remove any remaining standalone code blocks
-            const codeBlockRegex = /```[\s\S]*?```/g;
-            sanitizedText = sanitizedText.replace(codeBlockRegex, '');
-            
-            // 2. Parse the cleaned text into a structured outline
-            const lines = sanitizedText.split('\n');
-            let outlineHtml = '<div class="outline-view-container">';
-            let currentSectionContent = '';
+                // Choose an icon based on the callout type
+                const icons = {
+                    quote: '💡',
+                    question: '❓',
+                    example: '🎯',
+                    info: 'ℹ️',
+                    tip: '👍'
+                };
+                const icon = icons[calloutType] || 'ℹ️';
 
-            const renderSection = () => {
-                if (currentSectionContent.trim()) {
-                    outlineHtml += `<div class="outline-content">${markdownConverter.makeHtml(currentSectionContent)}</div>`;
-                    currentSectionContent = '';
-                }
-            };
+                finalHtml += `
+                    <div class="callout-card" data-callout-type="${calloutType}">
+                        <h4 class="callout-card-title">
+                            <span class="callout-card-icon">${icon}</span>
+                            <span>${escapeHtml(calloutTitle)}</span>
+                        </h4>
+                        <div>${markdownConverter.makeHtml(calloutContent)}</div>
+                    </div>
+                `;
+            }
 
-            lines.forEach(line => {
-                if (line.startsWith('## ')) {
-                    renderSection();
-                    outlineHtml += `<h2>${escapeHtml(line.substring(3))}</h2>`;
-                } else if (line.startsWith('### ')) {
-                    renderSection();
-                    outlineHtml += `<h3>${escapeHtml(line.substring(4))}</h3>`;
-                } else if (!line.startsWith('# ')) { // Ignore H1 title lines
-                    currentSectionContent += line + '\n';
-                }
-            });
-            renderSection();
-            outlineHtml += '</div>';
-            
-            modalBody.innerHTML = outlineHtml;
+            modalBody.innerHTML = finalHtml || '<p class="loading">No key concepts found in this note.</p>';
 
         } else {
             // For Rohan (and others), show the detailed "Summary View"
