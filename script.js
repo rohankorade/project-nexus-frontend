@@ -687,11 +687,16 @@ async function showPreview(note) {
         } else if (note.shared_by.toLowerCase() === 'malhar') {
             // --- NEW: Render Malhar's notes as a structured outline ---
 
-            // 1. Sanitize: Remove any section containing a dataviewjs block
-            const sectionWithDataviewRegex = /^(##|###)\s.*[\s\S]*?```dataviewjs[\s\S]*?```[\s\S]*?(?=\n##|\n###|\z)/gm;
-            let sanitizedText = markdownText.replace(sectionWithDataviewRegex, '');
+            // 1. Sanitize: Remove frontmatter, sections with dataviewjs, and other code blocks
+            const frontmatterRegex = /^---[\s\S]*?---\s*/;
+            let sanitizedText = markdownText.replace(frontmatterRegex, '');
 
-            // Also remove standalone code blocks
+            const attachmentsRegex = /\n##\s*Attachments[\s\S]*/;
+            sanitizedText = sanitizedText.replace(attachmentsRegex, '');
+            
+            const sectionWithDataviewRegex = /^(##|###)\s.*[\s\S]*?```dataviewjs[\s\S]*?```[\s\S]*?(?=\n##|\n###|\z)/gm;
+            sanitizedText = sanitizedText.replace(sectionWithDataviewRegex, '');
+            
             const codeBlockRegex = /```[\s\S]*?```/g;
             sanitizedText = sanitizedText.replace(codeBlockRegex, '');
 
@@ -708,16 +713,13 @@ async function showPreview(note) {
             };
 
             lines.forEach(line => {
-                if (line.startsWith('# ')) {
-                    renderSection(); // Render previous section content
-                    outlineHtml += `<h1>${escapeHtml(line.substring(2))}</h1>`;
-                } else if (line.startsWith('## ')) {
+                if (line.startsWith('## ')) {
                     renderSection();
                     outlineHtml += `<h2>${escapeHtml(line.substring(3))}</h2>`;
                 } else if (line.startsWith('### ')) {
                     renderSection();
                     outlineHtml += `<h3>${escapeHtml(line.substring(4))}</h3>`;
-                } else {
+                } else if (!line.startsWith('# ')) { // Ignore H1 title lines
                     currentSectionContent += line + '\n';
                 }
             });
