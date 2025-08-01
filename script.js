@@ -674,7 +674,7 @@ async function showPreview(note) {
                 </div>
             `;
 
-        } else if (note.type === 'Uncategorized' || note.shared_by.toLowerCase() === 'malhar') {
+        } else if (note.type === 'Uncategorized' {
             // For Malhar, show the simple "Raw Text View"
 
             // 1. Remove only the code blocks
@@ -683,6 +683,48 @@ async function showPreview(note) {
 
             // 2. Wrap the sanitized and escaped text in a <pre> tag
             modalBody.innerHTML = `<pre class="raw-text-view">${escapeHtml(sanitizedText)}</pre>`;
+
+        } else if (note.shared_by.toLowerCase() === 'malhar') {
+            // --- NEW: Render Malhar's notes as a structured outline ---
+
+            // 1. Sanitize: Remove any section containing a dataviewjs block
+            const sectionWithDataviewRegex = /^(##|###)\s.*[\s\S]*?```dataviewjs[\s\S]*?```[\s\S]*?(?=\n##|\n###|\z)/gm;
+            let sanitizedText = markdownText.replace(sectionWithDataviewRegex, '');
+
+            // Also remove standalone code blocks
+            const codeBlockRegex = /```[\s\S]*?```/g;
+            sanitizedText = sanitizedText.replace(codeBlockRegex, '');
+
+            // 2. Parse the cleaned text into a structured outline
+            const lines = sanitizedText.split('\n');
+            let outlineHtml = '<div class="outline-view-container">';
+            let currentSectionContent = '';
+
+            const renderSection = () => {
+                if (currentSectionContent.trim()) {
+                    outlineHtml += `<div class="outline-content">${markdownConverter.makeHtml(currentSectionContent)}</div>`;
+                    currentSectionContent = '';
+                }
+            };
+
+            lines.forEach(line => {
+                if (line.startsWith('# ')) {
+                    renderSection(); // Render previous section content
+                    outlineHtml += `<h1>${escapeHtml(line.substring(2))}</h1>`;
+                } else if (line.startsWith('## ')) {
+                    renderSection();
+                    outlineHtml += `<h2>${escapeHtml(line.substring(3))}</h2>`;
+                } else if (line.startsWith('### ')) {
+                    renderSection();
+                    outlineHtml += `<h3>${escapeHtml(line.substring(4))}</h3>`;
+                } else {
+                    currentSectionContent += line + '\n';
+                }
+            });
+            renderSection(); // Render the last section's content
+            outlineHtml += '</div>';
+
+            modalBody.innerHTML = outlineHtml;
 
         } else {
             // For Rohan (and others), show the detailed "Summary View"
