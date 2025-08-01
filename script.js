@@ -726,6 +726,19 @@ async function showPreview(note) {
                     </div>
                 `;
             }
+
+            // --- 4. Extract the main content (e.g., 'Dimensions') ---
+            // This looks for the first '##' heading after the 'PYQ' callout
+            const mainContentRegex = /(>\s*\[!question\][\s\S]*?\n)(##[\s\S]*?)(?=\n---|\n##\s*Evidence Bank|\z)/;
+            const mainContentMatch = cleanContent.match(mainContentRegex);
+            if (mainContentMatch && mainContentMatch[2]) {
+                const mainContent = mainContentMatch[2].trim();
+                finalHtml += `
+                    <div class="summary-section">
+                        ${markdownConverter.makeHtml(mainContent)}
+                    </div>
+                `;
+            }
             
             modalBody.innerHTML = finalHtml || '<p class="loading">Could not find the required callout sections in this note.</p>';
 
