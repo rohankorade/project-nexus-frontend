@@ -687,19 +687,26 @@ async function showPreview(note) {
         } else if (note.shared_by.toLowerCase() === 'malhar') {
             // --- NEW: Render Malhar's notes as a structured outline ---
 
-            // 1. Sanitize: Remove frontmatter, sections with dataviewjs, and other code blocks
+            // 1. Sanitize: Remove unwanted sections and all code blocks
             const frontmatterRegex = /^---[\s\S]*?---\s*/;
             let sanitizedText = markdownText.replace(frontmatterRegex, '');
-
+            
+            // Remove the ## Attachments section to the end of the file
             const attachmentsRegex = /\n##\s*Attachments[\s\S]*/;
             sanitizedText = sanitizedText.replace(attachmentsRegex, '');
-            
+
+            // NEW: Remove the ## Inter-Topic Links section up to the next HR
+            const interTopicLinksRegex = /\n##\s*Inter-Topic Links[\s\S]*?(?=\n---|\z)/;
+            sanitizedText = sanitizedText.replace(interTopicLinksRegex, '');
+
+            // Remove any other section containing a dataviewjs block
             const sectionWithDataviewRegex = /^(##|###)\s.*[\s\S]*?```dataviewjs[\s\S]*?```[\s\S]*?(?=\n##|\n###|\z)/gm;
             sanitizedText = sanitizedText.replace(sectionWithDataviewRegex, '');
             
+            // Remove any remaining standalone code blocks
             const codeBlockRegex = /```[\s\S]*?```/g;
             sanitizedText = sanitizedText.replace(codeBlockRegex, '');
-
+            
             // 2. Parse the cleaned text into a structured outline
             const lines = sanitizedText.split('\n');
             let outlineHtml = '<div class="outline-view-container">';
@@ -723,9 +730,9 @@ async function showPreview(note) {
                     currentSectionContent += line + '\n';
                 }
             });
-            renderSection(); // Render the last section's content
+            renderSection();
             outlineHtml += '</div>';
-
+            
             modalBody.innerHTML = outlineHtml;
 
         } else {
