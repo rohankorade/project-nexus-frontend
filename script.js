@@ -742,6 +742,20 @@ async function showPreview(note) {
                     `;
                 }
             }
+
+            // --- 5. Extract the 'Answer Writing Toolkit' section ---
+            const toolkitMatch = markdownText.match(/##\s*Answer Writing Toolkit[\s\S]*?([\s\S]*?)(?=\n---)/);
+            if (toolkitMatch && toolkitMatch[1]) {
+                const toolkitContent = toolkitMatch[1].trim();
+                const introsMatch = toolkitContent.match(/###\s*>\s*Model Introductions\s*([\s\S]*?)(?=\n###\s*>\s*Model Conclusions|\z)/);
+                const introsText = introsMatch ? introsMatch[1].trim() : null;
+                const conclusionsMatch = toolkitContent.match(/###\s*>\s*Model Conclusions\s*([\s\S]*)/);
+                const conclusionsText = conclusionsMatch ? conclusionsMatch[1].trim() : null;
+
+                if (introsText || conclusionsText) {
+                    finalHtml += `<div class="summary-section"><h4 class="summary-section-title">✍️ Answer Writing Toolkit</h4><div class="toolkit-container">${introsText ? `<div class="toolkit-column">${markdownConverter.makeHtml("### Introductions\n" + introsText)}</div>` : ''}${conclusionsText ? `<div class="toolkit-column">${markdownConverter.makeHtml("### Conclusions\n" + conclusionsText)}</div>` : ''}</div></div>`;
+                }
+            }
             
             modalBody.innerHTML = finalHtml || '<p class="loading">Could not find the required callout sections in this note.</p>';
 
