@@ -687,30 +687,23 @@ async function showPreview(note) {
         } else if (note.shared_by.toLowerCase() === 'malhar') {
             // --- NEW: Render Malhar's notes by extracting only callout blocks ---
 
-            // This regex finds all callout blocks, capturing the type, title, and content.
-            const calloutRegex = />\s*\[!(.*?)\]\s*(.*?)\n([\s\S]*?)(?=\n> \[!|\n##|\n---|```|\z)/g;
             let finalHtml = '';
-            let match;
 
-            while ((match = calloutRegex.exec(markdownText)) !== null) {
-                const calloutType = match[1].trim().toLowerCase(); // e.g., "quote"
-                const calloutTitle = match[2].trim(); // e.g., "Core Concept"
-                const calloutContent = match[3].replace(/>\s?/g, '').trim(); // Clean up content lines
+            // 1. Remove Frontmatter and the first H1 Title to create clean content
+            const frontmatterRegex = /^---[\s\S]*?---\s*/;
+            let cleanContent = markdownText.replace(frontmatterRegex, '');
+            const h1TitleRegex = /^#\s.*?\n/;
+            cleanContent = cleanContent.replace(h1TitleRegex, '');
 
-                // Choose an icon based on the callout type
-                const icons = {
-                    quote: '💡',
-                    question: '❓',
-                    example: '🎯',
-                    info: 'ℹ️',
-                    tip: '👍'
-                };
-                const icon = icons[calloutType] || 'ℹ️';
-
+            // 2. Extract the first '[!quote]' block
+            const quoteMatch = cleanContent.match(/>\s*\[!quote\]\s*(.*?)\n([\s\S]*?)(?=\n>\s*\[!question\])/);
+            if (quoteMatch && quoteMatch[1] && quoteMatch[2]) {
+                const calloutTitle = quoteMatch[1].trim();
+                const calloutContent = quoteMatch[2].replace(/>\s?/g, '').trim();
                 finalHtml += `
-                    <div class="callout-card" data-callout-type="${calloutType}">
+                    <div class="callout-card" data-callout-type="quote">
                         <h4 class="callout-card-title">
-                            <span class="callout-card-icon">${icon}</span>
+                            <span class="callout-card-icon">💡</span>
                             <span>${escapeHtml(calloutTitle)}</span>
                         </h4>
                         <div>${markdownConverter.makeHtml(calloutContent)}</div>
@@ -718,7 +711,23 @@ async function showPreview(note) {
                 `;
             }
 
-            modalBody.innerHTML = finalHtml || '<p class="loading">No key concepts found in this note.</p>';
+            // 3. Extract the '[!question]' block that follows
+            const pyqMatch = cleanContent.match(/>\s*\[!question\]\s*(.*?)\n([\s\S]*?)(?=\n##\s*)/);
+             if (pyqMatch && pyqMatch[1] && pyqMatch[2]) {
+                const calloutTitle = pyqMatch[1].trim();
+                const calloutContent = pyqMatch[2].replace(/>\s?/g, '').trim();
+                finalHtml += `
+                    <div class="callout-card" data-callout-type="question">
+                        <h4 class="callout-card-title">
+                            <span class="callout-card-icon">❓</span>
+                            <span>${escapeHtml(calloutTitle)}</span>
+                        </h4>
+                        <div>${markdownConverter.makeHtml(calloutContent)}</div>
+                    </div>
+                `;
+            }
+            
+            modalBody.innerHTML = finalHtml || '<p class="loading">Could not find the required callout sections in this note.</p>';
 
         } else {
             // For Rohan (and others), show the detailed "Summary View"
