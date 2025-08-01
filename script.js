@@ -712,7 +712,7 @@ async function showPreview(note) {
             }
 
             // 3. Extract the '[!question]' block that follows
-            const pyqMatch = cleanContent.match(/>\s*\[!question\]\s*(.*?)\n([\s\S]*?)(?=\n##\s*)/);
+            const pyqMatch = cleanContent.match(/>\s*\[!question\]\s*(.*?)\n([\s\S]*?)(?=\n#{2,4}\s*)/);
              if (pyqMatch && pyqMatch[1] && pyqMatch[2]) {
                 const calloutTitle = pyqMatch[1].trim();
                 const calloutContent = pyqMatch[2].replace(/>\s?/g, '').trim();
