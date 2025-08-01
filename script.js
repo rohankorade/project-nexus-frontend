@@ -674,7 +674,7 @@ async function showPreview(note) {
                 </div>
             `;
 
-        } else if (note.type === 'Uncategorized' {
+        } else if (note.type === 'Uncategorized') {
             // For Malhar, show the simple "Raw Text View"
 
             // 1. Remove only the code blocks
