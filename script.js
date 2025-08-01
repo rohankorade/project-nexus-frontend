@@ -689,14 +689,14 @@ async function showPreview(note) {
 
             let finalHtml = '';
 
-            // 1. Remove Frontmatter and the first H1 Title to create clean content
+            // 1. Sanitize the text by removing frontmatter and the H1 title
             const frontmatterRegex = /^---[\s\S]*?---\s*/;
             let cleanContent = markdownText.replace(frontmatterRegex, '');
             const h1TitleRegex = /^#\s.*?\n/;
             cleanContent = cleanContent.replace(h1TitleRegex, '');
 
-            // 2. Extract the first '[!quote]' block
-            const quoteMatch = cleanContent.match(/>\s*\[!quote\]\s*(.*?)\n([\s\S]*?)(?=\n>\s*\[!question\])/);
+            // 2. Extract the first '[!quote]' block, stopping at the next callout or H2/H3
+            const quoteMatch = cleanContent.match(/>\s*\[!quote\]\s*(.*?)\n([\s\S]*?)(?=\n>\s*\[!|^\s*##)/m);
             if (quoteMatch && quoteMatch[1] && quoteMatch[2]) {
                 const calloutTitle = quoteMatch[1].trim();
                 const calloutContent = quoteMatch[2].replace(/>\s?/g, '').trim();
@@ -711,8 +711,8 @@ async function showPreview(note) {
                 `;
             }
 
-            // 3. Extract the '[!question]' block that follows
-            const pyqMatch = cleanContent.match(/>\s*\[!question\]\s*(.*?)\n([\s\S]*?)(?=\n#{2,4}\s*)/);
+            // 3. Extract the '[!question]' block, stopping at the next H2/H3 or HR
+            const pyqMatch = cleanContent.match(/>\s*\[!question\]\s*(.*?)\n([\s\S]*?)(?=\n##\s*|\n---)/);
              if (pyqMatch && pyqMatch[1] && pyqMatch[2]) {
                 const calloutTitle = pyqMatch[1].trim();
                 const calloutContent = pyqMatch[2].replace(/>\s?/g, '').trim();
@@ -727,17 +727,20 @@ async function showPreview(note) {
                 `;
             }
 
-            // --- 4. Extract the main content (e.g., 'Dimensions') ---
-            // This looks for the first '##' heading after the 'PYQ' callout
-            const mainContentRegex = /(>\s*\[!question\][\s\S]*?\n)(##[\s\S]*?)(?=\n---|\n##\s*Evidence Bank|\z)/;
-            const mainContentMatch = cleanContent.match(mainContentRegex);
-            if (mainContentMatch && mainContentMatch[2]) {
-                const mainContent = mainContentMatch[2].trim();
-                finalHtml += `
-                    <div class="summary-section">
-                        ${markdownConverter.makeHtml(mainContent)}
-                    </div>
-                `;
+            // 4. Extract the main content that follows the callouts
+            // This starts after the PYQ block (if it exists) or after the Core Concept block
+            const lastCalloutMatch = pyqMatch || quoteMatch;
+            if(lastCalloutMatch) {
+                const contentAfterCallouts = cleanContent.substring(lastCalloutMatch.index + lastCalloutMatch[0].length);
+                const mainContentMatch = contentAfterCallouts.match(/([\s\S]*?)(?=\n---|\n##\s*(?:Evidence Bank|Answer Writing Toolkit|Inter-Topic Links|Attachments)|\z)/);
+                if (mainContentMatch && mainContentMatch[1].trim()) {
+                     const mainContent = mainContentMatch[1].trim();
+                     finalHtml += `
+                        <div class="summary-section">
+                            ${markdownConverter.makeHtml(mainContent)}
+                        </div>
+                    `;
+                }
             }
             
             modalBody.innerHTML = finalHtml || '<p class="loading">Could not find the required callout sections in this note.</p>';
